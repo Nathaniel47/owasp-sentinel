@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.coverage
+
+# Secrets and local state
+.env
+*.db
+*.sqlite3
+.llm_cache/
+
+# Benchmark targets are fetched at pinned commits, never vendored
+targets/*
+!targets/.gitkeep
+!targets/fetch.*
+!targets/commits.*
+
+# Editors / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
