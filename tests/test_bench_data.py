@@ -93,3 +93,18 @@ def test_load_juice_shop(tmp_path: Path) -> None:
     assert [c.key for c in ch] == ["aChallenge"]
     assert ch[0].has_code_snippets
     assert sorted(i.kind for i in issues) == ["duplicate", "missing_field"]
+
+
+def test_saved_sample_matches_regeneration() -> None:
+    """results/sample_ids.csv must equal a fresh seeded run (reproducibility)."""
+    import pytest
+
+    from sentinel.bench.build_data import RESULTS
+    from sentinel.bench.data import TARGETS
+
+    if not (TARGETS / "benchmark").exists():
+        pytest.skip("targets not fetched")
+    cases, _ = load_benchmark()
+    expected = [c.test_id for c in stratified_sample(cases)]
+    assert load_sample_ids(RESULTS / "sample_ids.csv") == expected
+    assert len(expected) == 450
