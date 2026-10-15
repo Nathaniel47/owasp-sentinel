@@ -55,3 +55,45 @@ python targets/fetch.py
 python -m sentinel.bench.build_data
 pytest
 ```
+
+# Step 4: Multi-language scanning
+
+## What was built
+- `sentinel/scanners/runner.py` runs Semgrep (or Opengrep) as a subprocess for
+  Java, JS/TS, Python and PHP, plus Bandit when Python files are present. Both only
+  read code; nothing scanned is ever executed.
+- `sentinel/core/sarif.py` turns each tool's SARIF output into one `Finding` record
+  (`models.py`): file, lines, rule, CWEs, OWASP categories, language, snippet.
+- `sentinel/core/owasp_map.py` + `owasp_2025.yaml` map CWE numbers to OWASP Top 10
+  2025 (A01 to A10) in one auditable file.
+- Fixtures: one tiny hand-written vulnerable file each for Java, JS, Python and PHP,
+  plus a sample SARIF file, under `tests/fixtures/`.
+
+## Why it matters
+Different tools speak different formats. Normalising once means triage, auto-fix and
+the benchmark all work on the same `Finding` shape, whatever language it came from.
+Scope note: PLAN.md makes Java and JS/TS the measured languages; Python is fixtures
+only and PHP is optional, so no benchmark claims are made for them.
+
+## Concepts, with one reading each
+- **SARIF** (a standard JSON format for static-analysis results). Read: the SARIF
+  2.1.0 overview at sarifweb.azurewebsites.net.
+- **CWE** (a catalogue of weakness types, e.g. CWE-89 is SQL injection). Read: the
+  "About CWE" page at cwe.mitre.org.
+- **OWASP Top 10 2025** (the category list we report against). Read: owasp.org/Top10/2025.
+- **SAST** (reading code for bugs without running it). Read: the Semgrep docs
+  "Writing rules" tutorial.
+
+## How to run and check
+```powershell
+pytest tests/test_scanning.py     # parser, mapper and runner (scanner calls mocked)
+pip install -e ".[scan]"          # Semgrep is not supported on native Windows: use WSL or Docker
+python -c "from pathlib import Path; from sentinel.scanners.runner import scan; print(scan(Path('tests/fixtures/java'), 'p/java'))"
+```
+- Unit tests mock the scanners, so they pass without Semgrep installed. The real
+  scan was **not** run on this machine (Semgrep is not installed here), so end-to-end
+  output is unverified.
+- `owasp_2025.yaml` is a draft mapping written from memory. Check it against OWASP's
+  published lists before quoting any per-category number.
+- The rule set (`config`) is a parameter: the Registry vs Opengrep decision in the
+  README is still open.

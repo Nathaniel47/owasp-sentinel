@@ -1,0 +1,12 @@
+{"version":"2.1.0","runs":[{"tool":{"driver":{"name":"Semgrep","rules":[
+ {"id":"java.sqli","shortDescription":{"text":"SQL injection"},
+  "properties":{"tags":["CWE-89: Improper Neutralization of Special Elements","security"]}},
+ {"id":"js.xss","properties":{"tags":["CWE-79"]}}]}},
+ "results":[
+ {"ruleId":"java.sqli","level":"error","message":{"text":"Tainted SQL"},
+  "locations":[{"physicalLocation":{"artifactLocation":{"uri":"tests/fixtures/java/SqlInjection.java"},
+   "region":{"startLine":3,"endLine":4,"snippet":{"text":"st.executeQuery(...)"}}}}]},
+ {"ruleId":"js.xss","level":"warning","message":{"text":"innerHTML"},
+  "locations":[{"physicalLocation":{"artifactLocation":{"uri":"tests/fixtures/javascript/xss.js"},
+   "region":{"startLine":3}}}]},
+ {"ruleId":"broken","message":{"text":"no location"}}]}]}

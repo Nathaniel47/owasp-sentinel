@@ -3,7 +3,7 @@
 Hybrid LLM + SAST scanner for OWASP Top 10 (2025), benchmarked on known-vulnerable
 code (OWASP Benchmark for Java, Juice Shop for JavaScript). See [PLAN.md](PLAN.md).
 
-**Status:** Step 2 done (repo setup). Scanner, benchmark and LLM work not started.
+**Status:** Steps 2-4 done (repo setup, data pipeline, scanner runner + normaliser). LLM triage, fix and benchmark work not started.
 
 ## Quickstart (Windows, PowerShell)
 
