@@ -97,11 +97,15 @@ def test_load_juice_shop(tmp_path: Path) -> None:
 
 def test_saved_sample_matches_regeneration() -> None:
     """results/sample_ids.csv must equal a fresh seeded run (reproducibility)."""
+    import os
+
     import pytest
 
     from sentinel.bench.build_data import RESULTS
     from sentinel.bench.data import TARGETS
 
+    if os.environ.get("CI"):
+        pytest.skip("targets are not fetched in CI; run locally (see README)")
     if not (TARGETS / "benchmark").exists():
         pytest.skip("targets not fetched")
     cases, _ = load_benchmark()
