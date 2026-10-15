@@ -77,7 +77,7 @@ def test_missing_scanner_raises(monkeypatch: pytest.MonkeyPatch) -> None:
 def test_scan_runs_bandit_only_for_python(monkeypatch: pytest.MonkeyPatch) -> None:
     calls: list[str] = []
 
-    def fake_run(cmd: list[str], timeout: int) -> str:
+    def fake_run(cmd: list[str], timeout: int, env: object = None) -> str:
         calls.append(cmd[0])
         return json.dumps(_sarif())
 
@@ -102,7 +102,7 @@ def test_scan_batched_splits_files_and_reports_progress(
 ) -> None:
     cmds: list[list[str]] = []
 
-    def fake_run(cmd: list[str], timeout: int) -> str:
+    def fake_run(cmd: list[str], timeout: int, env: object = None) -> str:
         cmds.append(cmd)
         return json.dumps(_sarif())
 

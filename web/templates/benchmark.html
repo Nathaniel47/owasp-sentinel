@@ -1,26 +1,50 @@
-<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Benchmark results</title>
-<style>
-body{font:15px/1.5 system-ui,sans-serif;max-width:860px;margin:2rem auto;padding:0 16px;color:#1a1a1a;background:#fff}
-table{border-collapse:collapse;width:100%;margin:1rem 0}th,td{padding:4px 8px;border-bottom:1px solid #ddd;text-align:right}
-th:first-child,td:first-child,td.l{text-align:left}.nc{color:#8a5a00}
-@media(prefers-color-scheme:dark){body{background:#161616;color:#e8e8e8}th,td{border-color:#333}.nc{color:#e0a84a}}
-</style></head><body>
-<h1>Baseline on the OWASP Benchmark</h1>
+{% extends "base.html" %}
+{% block title %}OWASP Sentinel: benchmark results{% endblock %}
+{% block body %}
+{% if t %}
+<h1>LLM triage on the OWASP Benchmark sample</h1>
+{% if t.preliminary %}
+<div class="banner" role="note"><strong>PRELIMINARY.</strong> Triage has been run
+{{ t.runs_completed }} of 3 planned times, so there is no run-to-run spread yet.
+Differences of a few points between B and C may be noise. This page updates when the
+remaining runs finish.</div>
+{% endif %}
+<p>Model <code>{{ t.model }}</code>, temperature {{ t.temperature }}. {{ t.sample_cases }}
+Benchmark cases (stratified sample, Java), {{ t.findings_triaged_per_run }} findings
+triaged per run. Only confident false positives are dropped.</p>
+<div class="scroll"><table><tr><th class="l">Configuration</th><th>Precision</th><th>Recall</th><th>FPR</th><th>Youden</th></tr>
+{% for n in t.names %}<tr><td class="l">{{ n }}</td>
+{% for m in ['precision','recall','fpr','youden'] %}{% set s = t.configs[n].overall[m] %}<td>{{ 'n/a' if s.mean is none else '%.3f' % s.mean }}{{ ' ± %.3f' % s.sd if s.sd else '' }}</td>{% endfor %}</tr>{% endfor %}</table></div>
+<h2>Per Benchmark category (precision / recall / FPR)</h2>
+<p class="mute">The OWASP column comes from <code>owasp_2025.yaml</code>, checked against the
+official OWASP Top 10 2025 CWE lists. Each cell rests on about 20 real and 20 fake cases.</p>
+<div class="scroll"><table><tr><th class="l">Category</th><th class="l">OWASP 2025</th>{% for n in t.names %}<th>{{ n }}</th>{% endfor %}</tr>
+{% for r in t.rows %}<tr><td class="l">{{ r.category }}</td><td class="l">{{ r.owasp }}</td>
+{% for c in r.cells %}<td>{% for m in ['precision','recall','fpr'] %}{{ 'n/a' if c[m].mean is none else '%.2f' % c[m].mean }}{{ ' / ' if not loop.last }}{% endfor %}</td>{% endfor %}</tr>{% endfor %}</table></div>
+<h3>Limits</h3>
+<ul>
+<li>Custom rules (B) raise recall but also the false-positive rate; they are broad and untuned.</li>
+<li>The LLM may have seen the public Benchmark in training, which could flatter C.</li>
+<li>One language (Java) and one benchmark. Juice Shop (JavaScript) is not scored here.</li>
+</ul>
+{% endif %}
+
+<h1>Baseline on the full OWASP Benchmark</h1>
 <p>Opengrep + GitLab sast-rules, no LLM. {{ d.n_cases }} cases, {{ d.n_findings }} findings.
 Precision and recall are shown only where ground truth exists.</p>
 {% macro tbl(rows) %}
-<table><tr><th>Category</th><th>TP</th><th>FP</th><th>TN</th><th>FN</th><th>Precision</th><th>Recall</th><th>FPR</th><th>Youden</th></tr>
+<div class="scroll"><table><tr><th>Category</th><th>TP</th><th>FP</th><th>TN</th><th>FN</th><th>Precision</th><th>Recall</th><th>FPR</th><th>Youden</th></tr>
 {% for r in rows %}<tr><td>{{ r.category }}</td><td>{{ r.tp }}</td><td>{{ r.fp }}</td><td>{{ r.tn }}</td><td>{{ r.fn }}</td>
-{% for k in ['precision','recall','fpr','youden'] %}<td>{{ 'n/a' if r[k] is none else '%.2f' % r[k] }}</td>{% endfor %}</tr>{% endfor %}</table>
+{% for k in ['precision','recall','fpr','youden'] %}<td>{{ 'n/a' if r[k] is none else '%.2f' % r[k] }}</td>{% endfor %}</tr>{% endfor %}</table></div>
 {% endmacro %}
 <h2>Full Benchmark</h2>{{ tbl(d.full) }}
 <h2>450-case sample</h2>{{ tbl(d.sample) }}
 <h2>Benchmark categories with no rule coverage</h2>
 <p>{% if d.uncovered_categories %}{{ d.uncovered_categories | join(', ') }}{% else %}None.{% endif %}</p>
 <h2>OWASP Top 10 2025 coverage</h2>
-<table><tr><th>ID</th><th>Category</th><th>Status</th><th>Cases</th></tr>
+<div class="scroll"><table><tr><th>ID</th><th>Category</th><th>Status</th><th>Cases</th></tr>
 {% for k, v in d.owasp_coverage.items() %}<tr><td>{{ k }}</td><td class="l">{{ v.name }}</td>
-<td class="l {{ 'nc' if v.status != 'Measured' }}">{{ v.status }}</td><td>{{ v.cases }}</td></tr>{% endfor %}</table>
-</body></html>
+<td class="l {{ 'nc' if v.status != 'Measured' }}">{{ v.status }}</td><td>{{ v.cases }}</td></tr>{% endfor %}</table></div>
+<p class="mute">"Measured" means ground truth exists for at least one CWE in that category,
+not that the whole category is tested. "Not covered" categories have no metrics.</p>
+{% endblock %}

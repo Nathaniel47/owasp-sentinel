@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{% block title %}OWASP Sentinel{% endblock %}</title>
+<style>
+:root{--bg:#fff;--fg:#1a1a1a;--mute:#5c5c5c;--line:#ddd;--card:#f6f6f4;--accent:#0b5cad;--warn-bg:#fff4d6;--warn-fg:#5c3d00;--bad:#a4262c;--ok:#1a6b3a}
+@media(prefers-color-scheme:dark){:root{--bg:#161616;--fg:#e8e8e8;--mute:#a0a0a0;--line:#333;--card:#212121;--accent:#6fb1f0;--warn-bg:#3a2e0d;--warn-fg:#f2d48a;--bad:#ff8a8f;--ok:#7bd49a}}
+*{box-sizing:border-box}
+body{font:15px/1.5 system-ui,sans-serif;max-width:860px;margin:0 auto;padding:0 16px 3rem;color:var(--fg);background:var(--bg)}
+nav{display:flex;gap:1rem;flex-wrap:wrap;align-items:baseline;padding:1rem 0;border-bottom:1px solid var(--line);margin-bottom:1rem}
+nav b{margin-right:auto}a{color:var(--accent)}
+table{border-collapse:collapse;width:100%;margin:1rem 0;font-size:14px}th,td{padding:4px 8px;border-bottom:1px solid var(--line);text-align:right}
+th:first-child,td:first-child,td.l,th.l{text-align:left}.nc{color:var(--warn-fg)}
+.scroll{overflow-x:auto}
+.banner{background:var(--warn-bg);color:var(--warn-fg);padding:.75rem 1rem;border-radius:6px;margin:1rem 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:.75rem 1rem;margin:.75rem 0}
+pre{margin:.5rem 0 0;overflow-x:auto;font:13px/1.4 ui-monospace,Consolas,monospace}
+pre .hit{background:var(--warn-bg);color:var(--warn-fg);display:block}pre span{display:block}
+textarea{width:100%;min-height:12rem;font:13px/1.4 ui-monospace,Consolas,monospace;background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:6px;padding:.5rem}
+button,select,.btn{font:inherit;padding:.4rem .8rem;border-radius:6px;border:1px solid var(--line);background:var(--card);color:var(--fg);cursor:pointer;text-decoration:none;display:inline-block}
+button.primary{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+.row{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin:.5rem 0}
+.tag{font-size:12px;border:1px solid var(--line);border-radius:10px;padding:0 .5rem;margin-right:.25rem;color:var(--mute)}
+.fp{color:var(--ok)}.tp{color:var(--bad)}.err{color:var(--bad);font-weight:600}.mute{color:var(--mute)}
+</style></head><body>
+<nav><b>OWASP Sentinel</b><a href="/">Scan code</a><a href="/benchmark">Benchmark results</a></nav>
+{% block body %}{% endblock %}
+</body></html>

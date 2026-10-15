@@ -200,3 +200,55 @@ for the same reason.
   ~1,160 calls needs planning. The cache makes runs resumable and re-scoring free.
 - Secrets: `scripts/check_secrets.py` is a pre-commit hook that blocks API-key-shaped
   strings and `.env` files; `.env.example` must keep empty values.
+
+## Step 7: Demo and deploy
+
+**What was built.** A public web demo (`/`): click an example or paste Java,
+JavaScript or Python, get findings mapped to the OWASP Top 10 2025, optionally with an
+LLM "likely real / likely false positive" verdict on each. `/benchmark` shows the
+measured results. One Docker image (`docker build --target demo`) holds the web app,
+Opengrep and Bandit. `DEPLOY.md` has the steps for Hugging Face Spaces.
+
+**Why Hugging Face Spaces (Docker).** The demo has to *run the scanner*, which is a
+native Opengrep binary. Streamlit Community Cloud and Vercel run Python or JavaScript
+only, so they cannot host it without dropping live scanning. Render's free web service
+can run Docker but has far less memory (512 MB) and spins down when idle. A Docker
+Space is free, gives 2 vCPU and 16 GB RAM, and visitors need no account. (Free-tier
+limits change; check each host's current terms before relying on them.)
+
+**Honest numbers.** The page loads in about 0.1 s and the four bundled examples answer
+instantly, because their scans are done once while the image is built. Scanning new
+code takes about 5 to 15 s: Opengrep spends roughly 4 s just starting and loading rules
+(measured: `opengrep --version` alone takes that long here), and the scan itself is
+under a second. Two things cut it: all rules for a language are merged into one file
+(13 s down to about 7 s for Java in my test), and Opengrep's temp files go to a private
+folder that is deleted. I did not manage to get live scans under 10 s on every machine,
+so the page says "about 5-15 s" instead of promising less.
+
+**Safety, in plain words.** A demo that takes strangers' code is an attack surface, so:
+the code is only ever read (never run), written to a file whose name the visitor cannot
+choose, and deleted; input is capped at 20 KB; each visitor gets 10 scans a minute;
+pages contain no JavaScript and are HTML-escaped; and the LLM is off unless the host
+adds a secret, with its own hourly and daily limits. The model's verdict only labels a
+finding. It never hides one, because a model can be talked into saying "false positive"
+by text inside the code.
+
+**Preliminary results are labelled, automatically.** The benchmark page reads
+`results/triage_eval.json` and shows a yellow PRELIMINARY banner while fewer than 3
+triage runs are recorded. When Step 6 finishes, the banner disappears by itself. The
+per-category table has an "OWASP 2025" column that comes from `owasp_2025.yaml`.
+
+**OWASP CWE map re-verified.** Before showing per-category numbers I compared
+`owasp_2025.yaml` with the raw HTML of all ten official 2025 category pages. All 249
+CWEs match (no missing, no extra); a test now pins the per-category counts.
+
+**Read.** Hugging Face docs, "Docker Spaces"; OWASP Cheat Sheet Series, "File Upload"
+(the same ideas apply to untrusted snippets).
+
+**Run and check.**
+
+```powershell
+docker build --target demo -t sentinel-demo .
+docker run --rm -p 7860:7860 sentinel-demo   # open http://localhost:7860
+pytest tests/test_demo.py
+```
