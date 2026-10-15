@@ -7,7 +7,10 @@ WORKDIR /app
 
 COPY pyproject.toml README.md ./
 COPY sentinel ./sentinel
+COPY web ./web
+COPY results ./results
 RUN pip install --no-cache-dir .
+ENV SENTINEL_ROOT=/app
 
 RUN useradd --create-home appuser && mkdir -p /data && chown appuser /data
 USER appuser

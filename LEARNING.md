@@ -107,3 +107,76 @@ python -c "from pathlib import Path; from sentinel.scanners.runner import scan; 
   on 100 Benchmark files. These are counts only; scoring against the answer key is
   the next piece of work.
 - Windows tip: in Git Bash set `MSYS_NO_PATHCONV=1` or `/targets/...` paths get rewritten.
+
+# Step 5: Remaining features
+
+Scope note: PLAN.md wins over BUILD_STEPS.md. The **GitHub App / PR commenting is
+out of scope in PLAN.md** (and CLAUDE.md says no features beyond PLAN.md), so it was
+not built. The benchmark page covers the Benchmark and Juice Shop, not WebGoat/DVWA,
+for the same reason.
+
+## Scoring the baseline (no LLM)
+- **What:** `sentinel/bench/metrics.py` compares the scanner's findings with the
+  Benchmark answer key. A test case is "flagged" if a finding in its file has a CWE
+  that belongs to the case's category. Real + flagged = TP, fake + flagged = FP,
+  real + not flagged = FN, fake + not flagged = TN.
+- **Why it matters:** a scanner that flags everything has perfect recall and is
+  useless. The Benchmark's own score, **Youden = recall - false-positive rate**, is 0
+  for random guessing and 1 for perfect. It stops us fooling ourselves.
+- **A judgement call to know about:** GitLab tags its weak-hash rule CWE-327, the
+  Benchmark's `hash` category is CWE-328. Without an alias the scorer would call
+  every hash case "missed". `CATEGORY_ALIASES` accepts 327 for `hash` and nothing else.
+- **Coverage:** a category is "no rule coverage" if no finding anywhere in it
+  has a matching CWE. OWASP Top 10 categories with no ground truth show as "Not covered".
+- Concepts: precision/recall (Google ML Crash Course, "Classification"), Youden's J
+  (the Wikipedia article "Youden's J statistic"), the Benchmark scorecards (OWASP Benchmark project page).
+
+## LLM layer: provider interface and cache
+- Every LLM call goes through `LLMClient` (`sentinel/llm/client.py`) and can be
+  wrapped by `CachedClient`, which stores each reply on disk by hash of
+  (model, run number, prompt). Reruns are free and reproducible; a different `run`
+  number gives independent repeats for variance.
+- `FakeClient` lets all tests run with no network or key. **No real model was called
+  while building this step**, so there are no with-triage numbers yet.
+
+## LLM triage
+- For each finding the model sees the rule, message, CWE and numbered code around the
+  flagged lines, and must answer in JSON: true/false positive, confidence, explanation.
+- Safe by default: an unparseable reply becomes "uncertain" and the finding is kept;
+  only a *confident* false positive (confidence >= 0.5) is dropped. Code is placed in a
+  `<code>` block and the system prompt says to ignore instructions inside it (prompt
+  injection defence; not a guarantee).
+- Read: Li et al. 2024, "IRIS: LLM-Assisted Static Analysis" (arXiv).
+
+## Auto-fix verified by re-scan
+- The model returns a unified diff. `verify/apply_patch.py` applies it in memory
+  (context lines must match; line numbers may drift). `verify/rescan.py` scans a temp
+  copy before and after. A fix counts only if the finding's rule no longer fires,
+  no rule appears that did not before, and the file still parses.
+- Limit: "still parses" is a real parse only for Python; for Java/JS it is a bracket-balance
+  check, which is weak. A stronger check needs a real parser (tree-sitter), not added
+  because it is outside PLAN.md.
+- Nothing is executed; the patched copy is only read by the scanner.
+
+## Benchmark page
+- `/benchmark` renders `results/benchmark.json` (written by
+  `python -m sentinel.bench.run_bench`): full-Benchmark table, 450-sample table,
+  rule-coverage gaps and the OWASP 2025 coverage matrix.
+- Run: `uvicorn sentinel.api.main:app` then open http://localhost:8000/benchmark.
+
+## Step 5 results and a faster full scan
+- Baseline (Opengrep + GitLab rules, full Benchmark, 2,740 cases): precision 0.64,
+  recall 0.49, false-positive rate 0.29, Youden 0.20. Full table: `results/baseline_full.md`.
+- **Four Benchmark categories are not covered by the rules at all** (no matching
+  finding anywhere): `sqli`, `trustbound`, `weakrand`, `xpathi`. This matches the rule
+  files: none carries CWE-89, 501, 330 or 643. Those cases score recall 0 by
+  construction, which drags the overall recall down. The open-source GitLab set has
+  no SQL-injection rule for Java, which is worth knowing before blaming "SAST".
+- Benchmark-category gaps and the OWASP 2025 view differ: the Benchmark gives ground
+  truth for A01, A02, A04, A05, A06 only; A03, A07, A08, A09, A10 are "Not covered".
+  The CWE-to-category file is still a draft, so check it before quoting per-category numbers.
+- Why the scan was slow: Docker on Windows reads bind-mounted folders through a slow
+  file-sharing layer, and 2,740 files made one run take ~14 min (and exceeded the
+  5-minute default timeout once). The fast path copies sources into a Docker volume
+  (native Linux disk) and scans in batches with progress: ~5 min, identical findings
+  (1,579) and identical scores.

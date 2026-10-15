@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Benchmark results</title>
+<style>
+body{font:15px/1.5 system-ui,sans-serif;max-width:860px;margin:2rem auto;padding:0 16px;color:#1a1a1a;background:#fff}
+table{border-collapse:collapse;width:100%;margin:1rem 0}th,td{padding:4px 8px;border-bottom:1px solid #ddd;text-align:right}
+th:first-child,td:first-child,td.l{text-align:left}.nc{color:#8a5a00}
+@media(prefers-color-scheme:dark){body{background:#161616;color:#e8e8e8}th,td{border-color:#333}.nc{color:#e0a84a}}
+</style></head><body>
+<h1>Baseline on the OWASP Benchmark</h1>
+<p>Opengrep + GitLab sast-rules, no LLM. {{ d.n_cases }} cases, {{ d.n_findings }} findings.
+Precision and recall are shown only where ground truth exists.</p>
+{% macro tbl(rows) %}
+<table><tr><th>Category</th><th>TP</th><th>FP</th><th>TN</th><th>FN</th><th>Precision</th><th>Recall</th><th>FPR</th><th>Youden</th></tr>
+{% for r in rows %}<tr><td>{{ r.category }}</td><td>{{ r.tp }}</td><td>{{ r.fp }}</td><td>{{ r.tn }}</td><td>{{ r.fn }}</td>
+{% for k in ['precision','recall','fpr','youden'] %}<td>{{ 'n/a' if r[k] is none else '%.2f' % r[k] }}</td>{% endfor %}</tr>{% endfor %}</table>
+{% endmacro %}
+<h2>Full Benchmark</h2>{{ tbl(d.full) }}
+<h2>450-case sample</h2>{{ tbl(d.sample) }}
+<h2>Benchmark categories with no rule coverage</h2>
+<p>{% if d.uncovered_categories %}{{ d.uncovered_categories | join(', ') }}{% else %}None.{% endif %}</p>
+<h2>OWASP Top 10 2025 coverage</h2>
+<table><tr><th>ID</th><th>Category</th><th>Status</th><th>Cases</th></tr>
+{% for k, v in d.owasp_coverage.items() %}<tr><td>{{ k }}</td><td class="l">{{ v.name }}</td>
+<td class="l {{ 'nc' if v.status != 'Measured' }}">{{ v.status }}</td><td>{{ v.cases }}</td></tr>{% endfor %}</table>
+</body></html>

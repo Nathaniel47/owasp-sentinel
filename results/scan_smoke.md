@@ -6,5 +6,5 @@
 | OWASP Benchmark, first 100 test files (BenchmarkTest00001-00100) | sast-rules/java | 65 (A04: 24, A05: 18, A01: 15, A02: 1) |
 
 Unscored: raw counts only. No ground-truth comparison yet, so no precision/recall claim.
-Juice Shop: 4 findings are in files with an extension outside our language map ("unknown").
+Juice Shop: the 4 findings in `.mjs` files were "unknown"; `.mjs/.cjs/.mts/.cts` are now mapped, so 0 unknown (28 typescript, 4 javascript).
 Raw findings JSON is git-ignored (it embeds Benchmark snippets, GPL).

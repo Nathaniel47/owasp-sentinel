@@ -23,5 +23,32 @@ services:
       - ./targets:/targets:ro
       - ./results:/out
 
+  # Fast path: copy sources into a Docker volume once (native Linux I/O is much
+  # faster than reading the Windows folder through the bind mount), then scan.
+  seed-volume:
+    image: alpine:3.20
+    profiles: ["scan"]
+    volumes:
+      - ./targets:/targets:ro
+      - scan-src:/work
+    entrypoint: ["sh", "-c"]
+    command:
+      - >
+        rm -rf /work/* &&
+        mkdir -p /work/benchmark /work/sast-rules &&
+        cp -r /targets/benchmark/src/main/java/org/owasp/benchmark/testcode /work/benchmark/ &&
+        cp -r /targets/sast-rules/java /targets/sast-rules/javascript /work/sast-rules/ &&
+        echo seeded
+
+  scanner-fast:
+    build:
+      context: .
+      target: scanner
+    profiles: ["scan"]
+    volumes:
+      - scan-src:/work:ro
+      - ./results:/out
+
 volumes:
+  scan-src:
   sentinel-data:
