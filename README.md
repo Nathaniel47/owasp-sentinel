@@ -3,7 +3,7 @@
 Hybrid LLM + SAST scanner for OWASP Top 10 (2025), benchmarked on known-vulnerable
 code (OWASP Benchmark for Java, Juice Shop for JavaScript). See [PLAN.md](PLAN.md).
 
-**Status:** Steps 2-4 done (repo setup, data pipeline, scanner runner + normaliser). LLM triage, fix and benchmark work not started.
+**Status:** Steps 2-5 done. Baseline scored on the full Benchmark (`results/baseline_full.md`); LLM triage, verified auto-fix and the `/benchmark` page are built and unit-tested, but no real LLM run has been done yet, so there are no with-triage numbers. The GitHub App is out of scope per PLAN.md.
 
 ## Quickstart (Windows, PowerShell)
 
@@ -81,6 +81,18 @@ docker compose --profile scan run --rm scanner /targets/juice-shop `
 ```
 
 The scanner container mounts `targets/` read-only and only reads the code.
+
+Full Benchmark scan, fast path (sources copied into a Docker volume, batches of 200
+files, progress printed; ~5 min vs ~14 min reading the Windows folder directly):
+
+```powershell
+$env:MSYS_NO_PATHCONV=1   # Git Bash only
+docker compose --profile scan run --rm seed-volume
+docker compose --profile scan run --rm scanner-fast /work/benchmark/testcode `
+  --config /work/sast-rules/java --batch-size 200 --out /out/scan_benchmark_full.json
+python -m sentinel.bench.run_bench results/scan_benchmark_full.json
+uvicorn sentinel.api.main:app   # then open http://localhost:8000/benchmark
+```
 
 ## Development
 

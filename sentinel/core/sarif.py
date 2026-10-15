@@ -13,8 +13,12 @@ _LEVELS = {"error": "error", "warning": "warning", "note": "info", "none": "info
 LANGUAGES = {
     ".java": "java",
     ".js": "javascript",
+    ".mjs": "javascript",
+    ".cjs": "javascript",
     ".jsx": "javascript",
     ".ts": "typescript",
+    ".mts": "typescript",
+    ".cts": "typescript",
     ".tsx": "typescript",
     ".py": "python",
     ".php": "php",

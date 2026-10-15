@@ -29,6 +29,10 @@ def test_language_of_covers_scoped_languages() -> None:
         "a.java": "java",
         "a.ts": "typescript",
         "a.jsx": "javascript",
+        "a.mjs": "javascript",
+        "a.cjs": "javascript",
+        "a.mts": "typescript",
+        "a.cts": "typescript",
         "a.py": "python",
         "a.php": "php",
         "README": "unknown",
@@ -91,3 +95,23 @@ def test_run_reports_failure(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(runner.subprocess, "run", lambda *a, **k: done)
     with pytest.raises(runner.ScannerError, match="failed"):
         runner._run(["semgrep"], 5)
+
+
+def test_scan_batched_splits_files_and_reports_progress(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    cmds: list[list[str]] = []
+
+    def fake_run(cmd: list[str], timeout: int) -> str:
+        cmds.append(cmd)
+        return json.dumps(_sarif())
+
+    monkeypatch.setattr(runner, "_run", fake_run)
+    files = [Path(f"f{i}.java") for i in range(5)]
+    seen: list[tuple[int, int]] = []
+    out = runner.scan_batched(
+        files, "rules/", batch_size=2, progress=lambda d, t: seen.append((d, t))
+    )
+    assert seen == [(2, 5), (4, 5), (5, 5)]
+    assert [c[-1] for c in cmds] == ["f1.java", "f3.java", "f4.java"]
+    assert "f0.java" in cmds[0] and len(out) == 6  # 2 findings per batch

@@ -8,6 +8,7 @@ from __future__ import annotations
 import json
 import shutil
 import subprocess
+from collections.abc import Callable, Sequence
 from pathlib import Path
 
 from sentinel.core.models import Finding
@@ -78,4 +79,33 @@ def scan(
     findings = run_semgrep(target, config, binary, timeout)
     if any(language_of(str(f)) == "python" for f in files):
         findings += run_bandit(target, timeout)
+    return findings
+
+
+def scan_batched(
+    files: Sequence[Path],
+    config: str | list[str],
+    binary: str = "opengrep",
+    timeout: int = DEFAULT_TIMEOUT,
+    batch_size: int = 200,
+    progress: Callable[[int, int], None] | None = None,
+) -> list[Finding]:
+    """Scan many files in batches so one slow batch cannot sink the whole run.
+
+    `timeout` applies per batch. `progress(done, total)` is called after each.
+    Bandit runs once per Python batch, same as `scan`.
+    """
+    findings: list[Finding] = []
+    total = len(files)
+    for start in range(0, total, batch_size):
+        batch = files[start : start + batch_size]
+        cmd = semgrep_command(batch[0], config, binary)[:-1]
+        cmd += [str(f) for f in batch]
+        findings += parse_sarif(json.loads(_run(cmd, timeout)), tool=binary)
+        py = [f for f in batch if language_of(str(f)) == "python"]
+        if py:
+            cmd = ["bandit", *[str(f) for f in py], "-f", "sarif", "-q"]
+            findings += parse_sarif(json.loads(_run(cmd, timeout)), tool="bandit")
+        if progress:
+            progress(min(start + batch_size, total), total)
     return findings
