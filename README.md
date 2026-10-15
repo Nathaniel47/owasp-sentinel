@@ -27,6 +27,25 @@ docker compose up --build
 See section 2 of [PLAN.md](PLAN.md). Benchmark targets are fetched into `targets/`
 at pinned commits and are never committed.
 
+## Benchmark data
+
+Targets are fetched at pinned commits (`targets/commits.json`), never vendored.
+
+| Dataset | Used for | Licence |
+|---|---|---|
+| OWASP BenchmarkJava | Java ground truth | GPL-2.0 (fetched, not copied) |
+| OWASP Juice Shop | JavaScript ground truth | MIT (fetched, not copied) |
+
+DVWA and WebGoat are out of scope and not fetched.
+
+To run the full data check locally, including the reproducibility test that is
+skipped in CI (it needs the fetched Benchmark checkout):
+
+```powershell
+python targets/fetch.py
+pytest tests/test_bench_data.py
+```
+
 ## Rules licence decision
 
 _TBD (week 1):_ Semgrep Registry rules vs Opengrep + community rules. Record the
