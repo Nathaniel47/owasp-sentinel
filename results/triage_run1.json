@@ -1,0 +1,1942 @@
+{
+ "BenchmarkTest00012.java:targets.sast-rules.java.inject.java_inject_rule-LDAPInjection:68": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application constructs an LDAP filter string by concatenating untrusted user input ('param') directly into the filter expression, which is then passed to 'idc.search'. Although the 'filters' array is provided, it is not used for the 'param' variable, leaving the application vulnerable to LDAP injection."
+ },
+ "BenchmarkTest00017.java:targets.sast-rules.java.inject.java_inject_rule-CommandInjection:63": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application directly concatenates untrusted user input from an HTTP header into a command string executed by Runtime.exec(), which is a classic OS command injection vulnerability."
+ },
+ "BenchmarkTest00018.java:rules.java.sentinel_java_sqli:59": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code directly concatenates untrusted input from an HTTP header into an SQL query string, which is a classic SQL injection vulnerability."
+ },
+ "BenchmarkTest00021.java:targets.sast-rules.java.inject.java_inject_rule-LDAPInjection:58": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application constructs an LDAP filter string by concatenating untrusted user input directly into the query string, which is then passed to the search method. While the search method uses a filter argument array, the user input is part of the filter template itself, rendering the parameterization ineffective against injection."
+ },
+ "BenchmarkTest00031.java:rules.java.sentinel_java_trust_boundary:52": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The application directly stores untrusted user input from an HTTP parameter into the HTTP session without validation, which can lead to session pollution or downstream vulnerabilities if the session data is later trusted."
+ },
+ "BenchmarkTest00044.java:targets.sast-rules.java.inject.java_inject_rule-LDAPInjection:59": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application constructs an LDAP filter string by directly concatenating user-supplied input without any sanitization or encoding, which allows an attacker to manipulate the query logic."
+ },
+ "BenchmarkTest00045.java:targets.sast-rules.java.inject.java_inject_rule-SpotbugsPathTraversalAbsolute:62": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code directly concatenates user-controlled input from a request parameter into a file path without any validation or sanitization, allowing for arbitrary path traversal."
+ },
+ "BenchmarkTest00048.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:72": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application retrieves user input from the query string and writes it directly to the HTTP response without any sanitization or encoding, while explicitly disabling XSS protection headers."
+ },
+ "BenchmarkTest00077.java:targets.sast-rules.java.inject.java_inject_rule-CommandInjection:99": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application takes user-controlled input from a cookie, assigns it to the variable 'bar', and concatenates it directly into a command string executed by ProcessBuilder. This allows an attacker to inject arbitrary shell commands."
+ },
+ "BenchmarkTest00085.java:rules.java.sentinel_java_weak_random:73": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses java.util.Random to generate a 'rememberMe' token, which is cryptographically insecure and predictable, making it vulnerable to session hijacking or impersonation attacks."
+ },
+ "BenchmarkTest00116.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:98": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The application retrieves user-controlled input from a cookie and reflects it directly into the HTTP response body at line 98 without any sanitization or encoding, which allows for XSS."
+ },
+ "BenchmarkTest00123.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherDESInsecure:64": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code explicitly uses the DES algorithm, which is cryptographically broken and considered insecure due to its small key size and vulnerability to brute-force attacks."
+ },
+ "BenchmarkTest00123.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherIntegrity:64": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses the DES algorithm with CBC mode, which is cryptographically broken and lacks built-in integrity protection, making it vulnerable to tampering and brute-force attacks."
+ },
+ "BenchmarkTest00123.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherPaddingOracle:64": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses DES/CBC/PKCS5Padding, which is vulnerable to padding oracle attacks and uses an insecure, deprecated cipher (DES)."
+ },
+ "BenchmarkTest00130.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherECBMode:86": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code retrieves a cryptographic algorithm string from a properties file and uses it to initialize a Cipher. If the property 'cryptoAlg2' is set to 'AES/ECB/PKCS5Padding' (which is the default value provided), it uses ECB mode, which is insecure as it does not provide message integrity or confidentiality for patterns in the plaintext."
+ },
+ "BenchmarkTest00130.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherIntegrity:86": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code retrieves the cryptographic algorithm from a properties file and defaults to 'AES/ECB/PKCS5Padding'. ECB mode is insecure as it does not provide message integrity and leaks patterns in the plaintext."
+ },
+ "BenchmarkTest00140.java:rules.java.sentinel_java_weak_random:63": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses java.lang.Math.random() to generate a 'rememberMe' token, which is cryptographically insecure and predictable. For security-sensitive identifiers like session tokens or remember-me cookies, a cryptographically secure random number generator like java.security.SecureRandom must be used."
+ },
+ "BenchmarkTest00155.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:56": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application takes user-controlled input from the Referer header, processes it through an opaque helper method, and writes it directly to the HTTP response without any sanitization or encoding. Additionally, the application explicitly disables XSS protection via the 'X-XSS-Protection' header, confirming the vulnerability."
+ },
+ "BenchmarkTest00176.java:targets.sast-rules.java.inject.java_inject_rule-CommandInjection:64": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application directly concatenates unsanitized user input from an HTTP header into a command string executed via Runtime.exec(), which is a classic OS command injection vulnerability."
+ },
+ "BenchmarkTest00199.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:66": {
+  "verdict": "false_positive",
+  "confidence": 0.9,
+  "explanation": "The flagged line 66 outputs the result of a database query (an Integer), not the user-supplied input directly. Therefore, there is no XSS vulnerability at this specific line."
+ },
+ "BenchmarkTest00204.java:rules.java.sentinel_java_sqli:60": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code constructs an SQL query by directly concatenating an untrusted request header value, which allows for SQL injection attacks."
+ },
+ "BenchmarkTest00207.java:rules.java.sentinel_java_xpath_injection:75": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code constructs an XPath expression by directly concatenating untrusted input from an HTTP header, which allows an attacker to inject malicious XPath syntax to manipulate the query logic."
+ },
+ "BenchmarkTest00207.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:77": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The application reflects user-supplied data (from the 'BenchmarkTest00207' header) directly into the HTTP response body without any encoding or sanitization, which allows for XSS."
+ },
+ "BenchmarkTest00230.java:rules.java.sentinel_java_weak_random:67": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses java.util.Random to generate a 'rememberMe' cookie value, which is cryptographically insecure and predictable. For session-related tokens, java.security.SecureRandom must be used to prevent session hijacking."
+ },
+ "BenchmarkTest00241.java:targets.sast-rules.java.cookie.java_cookie_rule-CookieInsecure:83": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code explicitly sets the Secure flag to false on line 85, which allows the cookie to be transmitted over unencrypted HTTP connections, violating security best practices."
+ },
+ "BenchmarkTest00245.java:rules.java.sentinel_java_weak_random:144": {
+  "verdict": "false_positive",
+  "confidence": 0.9,
+  "explanation": "The method getNextNumber accepts a Random generator as a parameter, allowing the caller to provide a SecureRandom instance. The method itself is not inherently insecure; the security depends on the object passed to it."
+ },
+ "BenchmarkTest00250.java:rules.java.sentinel_java_trust_boundary:83": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The application takes an arbitrary HTTP header name from the request and uses it as a key in the HTTP session without validation, which can lead to session pollution or denial of service."
+ },
+ "BenchmarkTest00256.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherDESInsecure:77": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code explicitly uses DES, which is a deprecated and cryptographically broken algorithm with a small 56-bit key size, making it vulnerable to brute-force attacks."
+ },
+ "BenchmarkTest00256.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherIntegrity:77": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses DES, which is a deprecated and cryptographically broken algorithm due to its small key size, and it uses CBC mode without an explicit integrity check, making it vulnerable to padding oracle attacks."
+ },
+ "BenchmarkTest00256.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherPaddingOracle:77": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses DES, which is a deprecated and insecure block cipher with a small key size, in CBC mode with PKCS5Padding, which is vulnerable to padding oracle attacks."
+ },
+ "BenchmarkTest00262.java:targets.sast-rules.java.inject.java_inject_rule-SpotbugsPathTraversalAbsolute:74": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application takes unsanitized input from an HTTP header and uses it directly to construct a java.io.File object, which is a classic path traversal vulnerability."
+ },
+ "BenchmarkTest00268.java:targets.sast-rules.java.crypto.java_crypto_rule-WeakMessageDigest:61": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses SHA-1, a cryptographically broken hash algorithm, to process user-provided input that is subsequently stored in a file, which is insecure for sensitive data handling."
+ },
+ "BenchmarkTest00272.java:targets.sast-rules.java.crypto.java_crypto_rule-WeakMessageDigest:75": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code explicitly uses MD5, a cryptographically broken hash algorithm, to process and store sensitive data (passwords). This is a clear violation of secure coding practices regarding cryptographic primitives."
+ },
+ "BenchmarkTest00286.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:56": {
+  "verdict": "false_positive",
+  "confidence": 0.9,
+  "explanation": "The code uses StringEscapeUtils.escapeHtml to sanitize the input before writing it to the response, which effectively mitigates XSS in an HTML context."
+ },
+ "BenchmarkTest00294.java:targets.sast-rules.java.inject.java_inject_rule-CommandInjection:72": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application takes untrusted input from an HTTP header, decodes it, and directly concatenates it into a command string passed to 'sh -c' or 'cmd.exe /c', which is a classic OS command injection vulnerability."
+ },
+ "BenchmarkTest00295.java:targets.sast-rules.java.inject.java_inject_rule-CommandInjection:72": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application takes untrusted input from an HTTP header, decodes it, and directly concatenates it into a command string executed by ProcessBuilder. This allows an attacker to inject arbitrary OS commands."
+ },
+ "BenchmarkTest00300.java:targets.sast-rules.java.cookie.java_cookie_rule-CookieInsecure:77": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code explicitly sets the cookie's secure attribute to false, which allows the cookie to be transmitted over unencrypted HTTP connections, violating security best practices."
+ },
+ "BenchmarkTest00304.java:targets.sast-rules.java.inject.java_inject_rule-CommandInjection:88": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application takes user-controlled input ('bar') and concatenates it into a command string that is executed via Runtime.exec(), allowing for arbitrary command injection."
+ },
+ "BenchmarkTest00348.java:targets.sast-rules.java.cookie.java_cookie_rule-CookieInsecure:62": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code explicitly sets the Secure flag to false on line 64, which allows the cookie to be transmitted over unencrypted HTTP connections, violating security best practices."
+ },
+ "BenchmarkTest00354.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherDESedeInsecure:59": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code explicitly uses 'DESede' (TripleDES) and 'DES' for encryption, both of which are cryptographically broken and considered insecure."
+ },
+ "BenchmarkTest00354.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherECBMode:59": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses 'DESede/ECB/PKCS5Padding' as a default cryptographic algorithm, which utilizes the insecure ECB mode. ECB mode does not provide message integrity or semantic security, making it vulnerable to pattern analysis and tampering."
+ },
+ "BenchmarkTest00354.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherIntegrity:59": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses 'DESede/ECB/PKCS5Padding' as a default cryptographic algorithm, which is insecure because ECB mode does not provide message integrity and DESede (Triple DES) is considered legacy and weak."
+ },
+ "BenchmarkTest00364.java:targets.sast-rules.java.inject.java_inject_rule-SpotbugsPathTraversalAbsolute:64": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code directly concatenates user-controlled input from the request parameter into a file path used by FileOutputStream without any validation or sanitization, allowing for arbitrary path traversal."
+ },
+ "BenchmarkTest00366.java:targets.sast-rules.java.inject.java_inject_rule-SpotbugsPathTraversalAbsolute:71": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code directly concatenates unsanitized user input from a request parameter into a file path, which is then used to open a file. This is a classic path traversal vulnerability."
+ },
+ "BenchmarkTest00368.java:rules.java.sentinel_java_weak_random:48": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses Math.random() to generate a 'remember me' cookie value, which is cryptographically insecure and predictable. For security-sensitive tokens like session identifiers or authentication cookies, a cryptographically secure random number generator like java.security.SecureRandom must be used."
+ },
+ "BenchmarkTest00403.java:targets.sast-rules.java.cookie.java_cookie_rule-CookieInsecure:68": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code explicitly sets the 'Secure' attribute of the cookie to 'false' on line 70, which allows the cookie to be transmitted over insecure HTTP connections."
+ },
+ "BenchmarkTest00403.java:targets.sast-rules.java.cookie.java_cookie_rule-HttpResponseSplitting:68": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The application directly uses user-supplied input from the request parameter to create a Cookie object without any validation or sanitization, which can lead to HTTP response splitting if the underlying servlet container does not strictly enforce RFC 6265."
+ },
+ "BenchmarkTest00405.java:targets.sast-rules.java.cookie.java_cookie_rule-HttpResponseSplitting:66": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The application takes user-supplied input directly from a request parameter and uses it to construct a new Cookie object without any validation or sanitization, which can lead to HTTP response splitting or cookie injection."
+ },
+ "BenchmarkTest00424.java:rules.java.sentinel_java_trust_boundary:56": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The application takes untrusted user input from a request parameter and stores it directly into the HTTP session without validation, which can lead to session fixation or session poisoning attacks."
+ },
+ "BenchmarkTest00427.java:rules.java.sentinel_java_trust_boundary:69": {
+  "verdict": "true_positive",
+  "confidence": 0.8,
+  "explanation": "The application takes untrusted user input from a request parameter and stores it directly into the HTTP session without validation, which can lead to session fixation or session pollution vulnerabilities."
+ },
+ "BenchmarkTest00442.java:rules.java.sentinel_java_xpath_injection:68": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code directly concatenates untrusted user input from an HTTP request into an XPath expression, which allows for XPath injection attacks."
+ },
+ "BenchmarkTest00442.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:70": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application takes user input from a request parameter and reflects it directly into the HTTP response at line 70 without any sanitization or encoding, which allows for reflected Cross-Site Scripting (XSS)."
+ },
+ "BenchmarkTest00445.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherDESInsecure:83": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code explicitly uses DES/CBC/PKCS5Padding, which is a deprecated and cryptographically broken algorithm due to its small 56-bit key size, making it vulnerable to brute-force attacks."
+ },
+ "BenchmarkTest00445.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherIntegrity:83": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses the DES algorithm with CBC mode, which is cryptographically broken and insecure due to its small key size and lack of built-in integrity protection."
+ },
+ "BenchmarkTest00445.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherPaddingOracle:83": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses DES/CBC/PKCS5Padding, which is a weak, deprecated algorithm (DES) combined with a mode (CBC) susceptible to padding oracle attacks. DES is considered cryptographically broken due to its small key size."
+ },
+ "BenchmarkTest00446.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherDESInsecure:68": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses the DES algorithm, which is cryptographically broken and considered insecure due to its short key length."
+ },
+ "BenchmarkTest00446.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherIntegrity:68": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses the DES algorithm, which is cryptographically broken and considered insecure due to its short key length, combined with CBC mode, which lacks built-in integrity protection."
+ },
+ "BenchmarkTest00446.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherPaddingOracle:68": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses DES/CBC/PKCS5Padding, which is a legacy algorithm susceptible to padding oracle attacks and is considered cryptographically broken due to its small key size and insecure mode of operation."
+ },
+ "BenchmarkTest00448.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherDESedeInsecure:61": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses 'DESede/ECB/PKCS5Padding' as a default cryptographic algorithm, which is insecure and deprecated. The use of ECB mode is particularly dangerous as it does not provide semantic security."
+ },
+ "BenchmarkTest00448.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherECBMode:61": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application retrieves a cryptographic algorithm string from a configuration file and uses it to initialize a Cipher instance. The default value 'DESede/ECB/PKCS5Padding' uses ECB mode, which is insecure as it does not provide message integrity and is vulnerable to pattern analysis."
+ },
+ "BenchmarkTest00448.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherIntegrity:61": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses a configurable algorithm string from a properties file, which defaults to 'DESede/ECB/PKCS5Padding'. ECB mode does not provide message integrity and is considered cryptographically weak, and DESede is a legacy algorithm with a small block size."
+ },
+ "BenchmarkTest00462.java:targets.sast-rules.java.crypto.java_crypto_rule-WeakMessageDigest:68": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses SHA-1, which is cryptographically broken and vulnerable to collision attacks, for hashing sensitive data (passwords) stored in a file."
+ },
+ "BenchmarkTest00462.java:targets.sast-rules.java.crypto.java_crypto_rule-WeakMessageDigest:70": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code explicitly uses SHA-1, which is a cryptographically broken hash algorithm, for hashing sensitive data (passwords) and storing them in a file."
+ },
+ "BenchmarkTest00486.java:rules.java.sentinel_java_weak_random:52": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses java.util.Random to generate a 'remember me' cookie value, which is cryptographically insecure and predictable, making it vulnerable to session hijacking."
+ },
+ "BenchmarkTest00487.java:rules.java.sentinel_java_weak_random:57": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses java.util.Random to generate a 'rememberMe' token, which is cryptographically insecure and predictable, making it vulnerable to session hijacking."
+ },
+ "BenchmarkTest00491.java:targets.sast-rules.java.cookie.java_cookie_rule-CookieInsecure:71": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code explicitly sets the secure flag to false on line 73, which allows the cookie to be transmitted over unencrypted HTTP connections, violating security best practices."
+ },
+ "BenchmarkTest00491.java:targets.sast-rules.java.cookie.java_cookie_rule-HttpResponseSplitting:71": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The application takes user-supplied input from a request parameter and directly uses it to construct a Cookie object without any validation or sanitization, which can lead to HTTP response splitting or cookie injection."
+ },
+ "BenchmarkTest00493.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:59": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application retrieves user input from a request parameter and writes it directly to the HTTP response without any sanitization or encoding. Furthermore, the Content-Type is set to text/html and the X-XSS-Protection header is explicitly disabled, creating a clear XSS vulnerability."
+ },
+ "BenchmarkTest00494.java:targets.sast-rules.java.inject.java_inject_rule-CommandInjection:83": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application takes user-supplied input from a request parameter and directly incorporates it into an OS command executed via Runtime.exec(), allowing for arbitrary command injection."
+ },
+ "BenchmarkTest00499.java:targets.sast-rules.java.inject.java_inject_rule-CommandInjection:62": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application directly concatenates untrusted user input from the request parameter into a command string passed to Runtime.exec(), which is a classic OS command injection vulnerability."
+ },
+ "BenchmarkTest00500.java:targets.sast-rules.java.inject.java_inject_rule-CommandInjection:68": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application takes unsanitized user input from a request parameter and concatenates it directly into a command string executed by Runtime.exec(), which is a classic OS command injection vulnerability."
+ },
+ "BenchmarkTest00524.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherECBMode:96": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code retrieves the cryptographic algorithm from a properties file with a default value of 'AES/ECB/PKCS5Padding'. ECB mode is insecure because it does not provide message integrity or confidentiality for patterns in the plaintext."
+ },
+ "BenchmarkTest00524.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherIntegrity:96": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application retrieves the cryptographic algorithm from a properties file and defaults to 'AES/ECB/PKCS5Padding'. ECB mode is insecure as it does not provide message integrity and is vulnerable to pattern analysis."
+ },
+ "BenchmarkTest00527.java:targets.sast-rules.java.inject.java_inject_rule-SpotbugsPathTraversalAbsolute:64": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application uses user-controlled input from the request parameter to construct a file path via the File constructor without any validation or sanitization, which is a classic path traversal vulnerability."
+ },
+ "BenchmarkTest00529.java:targets.sast-rules.java.inject.java_inject_rule-SpotbugsPathTraversalAbsolute:67": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code directly concatenates user-controlled input (the parameter name) to a file path string and uses it in a FileInputStream without any validation or sanitization, allowing for arbitrary path traversal."
+ },
+ "BenchmarkTest00530.java:targets.sast-rules.java.inject.java_inject_rule-LDAPInjection:94": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application constructs an LDAP filter string by concatenating user-controlled input ('bar') without any sanitization or the use of parameterized queries, which is a classic LDAP injection vulnerability."
+ },
+ "BenchmarkTest00541.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:71": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application uses user-controlled input ('param') as the format string in response.getWriter().format(), which is a sink for Cross-Site Scripting (XSS) and potentially other injection attacks."
+ },
+ "BenchmarkTest00555.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:68": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code directly writes user-controlled input (the parameter name) to the HTTP response without any sanitization or encoding, and explicitly disables XSS protection via the X-XSS-Protection header."
+ },
+ "BenchmarkTest00557.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:67": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application takes user-controlled input from the request parameters and writes it directly to the HTTP response without any sanitization or encoding, while explicitly disabling XSS protection headers."
+ },
+ "BenchmarkTest00558.java:targets.sast-rules.java.inject.java_inject_rule-CommandInjection:84": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The variable 'bar' is derived from user-controlled request parameters and is directly concatenated into a shell command string passed to 'ProcessBuilder', allowing for OS command injection."
+ },
+ "BenchmarkTest00565.java:targets.sast-rules.java.cookie.java_cookie_rule-CookieInsecure:77": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code explicitly sets the Secure flag to false on line 79, which allows the cookie to be transmitted over unencrypted HTTP connections, violating security best practices."
+ },
+ "BenchmarkTest00565.java:targets.sast-rules.java.cookie.java_cookie_rule-HttpResponseSplitting:77": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The application takes user-supplied input from the request parameters and directly uses it to construct a Cookie object without any validation or sanitization, which can lead to HTTP response splitting or cookie injection."
+ },
+ "BenchmarkTest00567.java:targets.sast-rules.java.inject.java_inject_rule-CommandInjection:78": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application takes user-controlled input (param) and concatenates it directly into a string that is executed as an OS command via Runtime.exec(), which is a classic command injection vulnerability."
+ },
+ "BenchmarkTest00573.java:targets.sast-rules.java.inject.java_inject_rule-CommandInjection:70": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code directly passes user-controlled input (the 'bar' variable derived from request parameters) into the environment variables array of the Runtime.exec() method, which is a classic sink for command injection vulnerabilities."
+ },
+ "BenchmarkTest00607.java:rules.java.sentinel_java_xpath_injection:79": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application constructs an XPath query by directly concatenating user-controlled input ('bar') into the expression string, which allows for XPath injection attacks."
+ },
+ "BenchmarkTest00607.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:81": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The application retrieves user-controlled input (via request parameters) and reflects it directly into the HTTP response at line 81 without any HTML encoding, which allows for reflected Cross-Site Scripting (XSS)."
+ },
+ "BenchmarkTest00610.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherDESInsecure:83": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code explicitly uses DES, which is a deprecated and cryptographically broken algorithm due to its small key size, making it vulnerable to brute-force attacks."
+ },
+ "BenchmarkTest00618.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherECBMode:69": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses 'AES/ECB/PKCS5Padding' as the default cryptographic algorithm, which is insecure because ECB mode does not provide message integrity and is vulnerable to pattern analysis."
+ },
+ "BenchmarkTest00618.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherIntegrity:69": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code retrieves the cryptographic algorithm from a properties file and defaults to 'AES/ECB/PKCS5Padding'. ECB mode is insecure because it does not provide message integrity and leaks patterns in the plaintext."
+ },
+ "BenchmarkTest00630.java:targets.sast-rules.java.inject.java_inject_rule-LDAPInjection:82": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application constructs an LDAP filter string by concatenating untrusted user input directly into the query string, which is then executed via idc.search(base, filter, sc). This is a classic LDAP injection vulnerability as it does not use the parameterized search method that provides automatic encoding."
+ },
+ "BenchmarkTest00636.java:targets.sast-rules.java.crypto.java_crypto_rule-WeakMessageDigest:51": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses SHA1, which is cryptographically broken and vulnerable to collision attacks, to hash potentially sensitive data (as indicated by the file name 'passwordFile.txt')."
+ },
+ "BenchmarkTest00637.java:targets.sast-rules.java.crypto.java_crypto_rule-WeakMessageDigest:56": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application uses MD5, a cryptographically broken hash algorithm, to process user-provided input that is subsequently stored in a file, which is insecure for sensitive data."
+ },
+ "BenchmarkTest00654.java:rules.java.sentinel_java_weak_random:60": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The code uses java.util.Random to generate a 'rememberMe' cookie value, which is cryptographically insecure and predictable, making the session management vulnerable to hijacking."
+ },
+ "BenchmarkTest00694.java:targets.sast-rules.java.inject.java_inject_rule-LDAPInjection:60": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code constructs an LDAP filter string by directly concatenating untrusted user input (bar) into the query, which is a classic LDAP injection vulnerability. It fails to use the secure parameterized search method that automatically handles encoding."
+ },
+ "BenchmarkTest00695.java:targets.sast-rules.java.inject.java_inject_rule-LDAPInjection:65": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application constructs an LDAP filter string by directly concatenating untrusted user input (param) without any sanitization or the use of parameterized search arguments, leading to a clear LDAP injection vulnerability."
+ },
+ "BenchmarkTest00725.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:71": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application takes user-supplied input from a request parameter and writes it directly to the HTTP response without any sanitization or encoding. Furthermore, it explicitly disables the browser's built-in XSS protection via the X-XSS-Protection header, confirming the vulnerability."
+ },
+ "BenchmarkTest00731.java:targets.sast-rules.java.inject.java_inject_rule-CommandInjection:62": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application directly concatenates untrusted user input from the request parameter into a command string executed by a shell ('sh -c' or 'cmd.exe /c'), which is a classic command injection vulnerability."
+ },
+ "BenchmarkTest00734.java:rules.java.sentinel_java_weak_random:69": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The code uses java.util.Random to generate a 'rememberMe' cookie value, which is cryptographically insecure and predictable. For security-sensitive tokens like session identifiers or remember-me cookies, java.security.SecureRandom should be used instead."
+ },
+ "BenchmarkTest00736.java:targets.sast-rules.java.cookie.java_cookie_rule-CookieInsecure:70": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code explicitly sets the Secure flag to false on line 72, which allows the cookie to be transmitted over unencrypted HTTP connections, violating security best practices."
+ },
+ "BenchmarkTest00736.java:targets.sast-rules.java.cookie.java_cookie_rule-HttpResponseSplitting:70": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The application takes user-supplied input from a request parameter and uses it directly to construct a Cookie object without any validation or sanitization. This allows for potential HTTP response splitting or cookie injection attacks if the underlying servlet container does not strictly enforce RFC 6265."
+ },
+ "BenchmarkTest00783.java:targets.sast-rules.java.inject.java_inject_rule-SpotbugsPathTraversalAbsolute:82": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application directly concatenates user-controlled input (retrieved from the query string) with a directory path to form a file path, which is a classic path traversal vulnerability."
+ },
+ "BenchmarkTest00802.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:80": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application takes user-supplied input from the query string, decodes it, and writes it directly to the HTTP response without any HTML encoding or sanitization. Additionally, the 'X-XSS-Protection' header is explicitly disabled, confirming the vulnerability."
+ },
+ "BenchmarkTest00817.java:rules.java.sentinel_java_weak_random:92": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses java.util.Random to generate a 'rememberMe' token, which is cryptographically insecure and predictable. For security-sensitive tokens like session identifiers or remember-me cookies, java.security.SecureRandom must be used."
+ },
+ "BenchmarkTest00818.java:rules.java.sentinel_java_weak_random:75": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses java.util.Random to generate a 'rememberMe' cookie value, which is cryptographically insecure and predictable. For security-sensitive tokens like session identifiers or remember-me cookies, java.security.SecureRandom must be used."
+ },
+ "BenchmarkTest00821.java:targets.sast-rules.java.cookie.java_cookie_rule-CookieInsecure:88": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code explicitly sets the secure flag of the cookie to false, which allows the cookie to be transmitted over unencrypted HTTP connections, violating security best practices."
+ },
+ "BenchmarkTest00839.java:rules.java.sentinel_java_sqli:83": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code constructs an SQL query by concatenating untrusted user input ('bar') directly into the query string, which is then passed to a PreparedStatement. Even though a PreparedStatement is used, the injection occurs in the string construction phase, rendering the parameterization ineffective for that specific part of the query."
+ },
+ "BenchmarkTest00852.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:95": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The variable 'bar' is assigned a hardcoded safe value ('a_Value') at line 76, but the logic flow is confusing and the code demonstrates a pattern where user-controlled input ('param') is processed into an XPath query. While 'bar' is currently safe due to the overwrite, the structure is highly vulnerable to XSS if the logic were modified, and the direct output to the response writer without encoding remains a security risk."
+ },
+ "BenchmarkTest00859.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherDESedeInsecure:58": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses DESede (TripleDES) and DES, which are cryptographically broken and insecure algorithms. The configuration is loaded from a properties file, but the default value provided is insecure."
+ },
+ "BenchmarkTest00859.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherECBMode:58": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code retrieves a cryptographic algorithm string from a properties file and uses it to initialize a Cipher. The default value is 'DESede/ECB/PKCS5Padding', which uses the insecure ECB mode and a deprecated algorithm (DESede), violating cryptographic best practices."
+ },
+ "BenchmarkTest00859.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherIntegrity:58": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses a weak, legacy cryptographic algorithm (DESede/ECB/PKCS5Padding) loaded from a configuration file, which lacks integrity protection and is vulnerable to known attacks."
+ },
+ "BenchmarkTest00898.java:rules.java.sentinel_java_weak_random:57": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses java.util.Random to generate a 'rememberMe' cookie value, which is cryptographically insecure and predictable. For security-sensitive tokens like session identifiers or remember-me cookies, java.security.SecureRandom must be used."
+ },
+ "BenchmarkTest00903.java:targets.sast-rules.java.cookie.java_cookie_rule-CookieInsecure:83": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code explicitly calls cookie.setSecure(false), which violates the security requirement to protect cookies from transmission over insecure HTTP connections."
+ },
+ "BenchmarkTest00948.java:targets.sast-rules.java.inject.java_inject_rule-LDAPInjection:78": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application constructs an LDAP filter string by directly concatenating untrusted user input ('bar') into the query string, which is then passed to 'ctx.search'. This is a classic LDAP injection vulnerability as it does not use the parameterized 'filterArgs' method to safely handle user input."
+ },
+ "BenchmarkTest00959.java:targets.sast-rules.java.inject.java_inject_rule-LDAPInjection:82": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application constructs an LDAP filter string by concatenating user-controlled input ('bar') directly into the filter expression, which is then passed to the search method. Even though the search method uses the filterArgs parameter for part of the query, the concatenation of 'bar' into the filter string itself allows for LDAP injection."
+ },
+ "BenchmarkTest00963.java:targets.sast-rules.java.crypto.java_crypto_rule-WeakMessageDigest:69": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code explicitly uses MD5, a cryptographically broken hash algorithm, to process potentially sensitive input and store it in a file, which is insecure."
+ },
+ "BenchmarkTest00977.java:targets.sast-rules.java.cookie.java_cookie_rule-CookieInsecure:83": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code explicitly sets the Secure flag to false on line 85, which allows the cookie to be transmitted over unencrypted HTTP connections, violating security best practices."
+ },
+ "BenchmarkTest00991.java:rules.java.sentinel_java_trust_boundary:69": {
+  "verdict": "true_positive",
+  "confidence": 0.8,
+  "explanation": "The code uses untrusted user-controlled input (derived from a cookie) as a key in the HTTP session, which can lead to session pollution or denial of service by exhausting session memory."
+ },
+ "BenchmarkTest00992.java:rules.java.sentinel_java_trust_boundary:69": {
+  "verdict": "true_positive",
+  "confidence": 0.8,
+  "explanation": "The application uses untrusted input from a cookie as a key in the HTTP session, which can lead to session pollution or denial of service if the input is not validated."
+ },
+ "BenchmarkTest00994.java:rules.java.sentinel_java_trust_boundary:69": {
+  "verdict": "true_positive",
+  "confidence": 0.8,
+  "explanation": "The application takes data from a cookie, processes it, and stores it directly into the HTTP session. Since cookies are client-controlled and can be manipulated, storing them in the session without validation constitutes a trust boundary violation."
+ },
+ "BenchmarkTest01013.java:rules.java.sentinel_java_xpath_injection:85": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application constructs an XPath expression using untrusted input from a cookie without any validation or sanitization, allowing for XPath injection."
+ },
+ "BenchmarkTest01013.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:92": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The application retrieves a value from a cookie, processes it, and then writes the content of an XML node directly to the HTTP response without any sanitization or encoding, leading to a potential XSS vulnerability."
+ },
+ "BenchmarkTest01023.java:targets.sast-rules.java.inject.java_inject_rule-LDAPInjection:64": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The LDAP filter string is constructed by concatenating user-controlled input ('bar') directly into the query string, which is then passed to 'ctx.search'. While the 'filters' array is provided, it is not used to sanitize the 'bar' variable, leaving the application vulnerable to LDAP injection."
+ },
+ "BenchmarkTest01024.java:targets.sast-rules.java.inject.java_inject_rule-LDAPInjection:64": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The LDAP filter string is constructed using unsanitized user input ('bar') via string concatenation before being passed to the search method. Although the search method uses the four-argument signature, only the '{0}' placeholder is safely encoded; the part of the filter containing 'bar' remains vulnerable to injection."
+ },
+ "BenchmarkTest01025.java:targets.sast-rules.java.inject.java_inject_rule-SpotbugsPathTraversalAbsolute:54": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application takes user-controlled input from an HTTP header, processes it through an inner class, and uses it directly to construct a file path without any validation or sanitization, which is a classic path traversal vulnerability."
+ },
+ "BenchmarkTest01033.java:targets.sast-rules.java.inject.java_inject_rule-SpotbugsPathTraversalAbsolute:59": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application directly concatenates user-controlled input from an HTTP header into a file path used by FileOutputStream without any validation or sanitization, allowing for arbitrary path traversal."
+ },
+ "BenchmarkTest01047.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:57": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application takes user-controlled input from the 'Referer' header, performs no sanitization or encoding, and reflects it directly into an HTML response, creating a clear XSS vulnerability."
+ },
+ "BenchmarkTest01067.java:targets.sast-rules.java.inject.java_inject_rule-CommandInjection:61": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application takes untrusted user input from an HTTP header, processes it, and passes it directly into the environment variables array of a Runtime.exec() call, which is a known sink for command injection."
+ },
+ "BenchmarkTest01068.java:targets.sast-rules.java.inject.java_inject_rule-CommandInjection:64": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application takes user-controlled input from an HTTP header, processes it, and concatenates it directly into a command string executed by Runtime.exec(). This allows an attacker to inject arbitrary OS commands."
+ },
+ "BenchmarkTest01080.java:rules.java.sentinel_java_trust_boundary:54": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The application takes user-controlled input from an HTTP header and uses it as a key in the HTTP session without validation, which can lead to session poisoning or denial of service."
+ },
+ "BenchmarkTest01082.java:rules.java.sentinel_java_trust_boundary:54": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The application uses untrusted user-controlled input (from a request header) as a key in the HTTP session, which can lead to session poisoning or denial of service by overwriting or exhausting session attributes."
+ },
+ "BenchmarkTest01097.java:rules.java.sentinel_java_sqli:58": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code directly concatenates untrusted user input from an HTTP header into a raw SQL query string, which is a classic SQL injection vulnerability."
+ },
+ "BenchmarkTest01102.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherDESInsecure:74": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code explicitly uses DES, which is a deprecated and cryptographically broken algorithm with a small 56-bit key size, making it vulnerable to brute-force attacks."
+ },
+ "BenchmarkTest01102.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherIntegrity:74": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses DES, which is a deprecated and cryptographically broken algorithm due to its small 56-bit key size, and it is used in CBC mode without an authentication mechanism, making it vulnerable to padding oracle attacks."
+ },
+ "BenchmarkTest01102.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherPaddingOracle:74": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses DES/CBC/PKCS5Padding, which is insecure due to the use of a deprecated, weak block cipher (DES) and a padding mode susceptible to padding oracle attacks."
+ },
+ "BenchmarkTest01103.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherDESInsecure:74": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code explicitly uses 'DES/CBC/PKCS5Padding', which is a cryptographically broken algorithm due to its small key size and vulnerability to brute-force attacks."
+ },
+ "BenchmarkTest01103.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherIntegrity:74": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses the DES algorithm, which is considered cryptographically broken and insecure due to its short key length, and it uses CBC mode without an authenticated encryption mechanism, failing to provide message integrity."
+ },
+ "BenchmarkTest01103.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherPaddingOracle:74": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses DES/CBC/PKCS5Padding, which is insecure due to the use of a weak cipher (DES) and a mode susceptible to padding oracle attacks. DES is deprecated and should not be used for encryption."
+ },
+ "BenchmarkTest01109.java:targets.sast-rules.java.inject.java_inject_rule-SpotbugsPathTraversalAbsolute:63": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application uses untrusted user-controlled input (HTTP header names) to construct a file path without any validation or sanitization, which directly enables path traversal attacks."
+ },
+ "BenchmarkTest01111.java:targets.sast-rules.java.inject.java_inject_rule-SpotbugsPathTraversalAbsolute:68": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application directly concatenates user-controlled input (from an HTTP header) to a file path string and uses it to open a FileInputStream without any validation or sanitization, which is a classic path traversal vulnerability."
+ },
+ "BenchmarkTest01112.java:targets.sast-rules.java.inject.java_inject_rule-SpotbugsPathTraversalAbsolute:68": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application concatenates untrusted user input (a header name) directly into a file path used by FileInputStream, which allows for arbitrary path traversal."
+ },
+ "BenchmarkTest01116.java:targets.sast-rules.java.inject.java_inject_rule-SpotbugsPathTraversalAbsolute:75": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses user-controlled input (header names) to construct a file path without any validation or sanitization, which allows for path traversal attacks."
+ },
+ "BenchmarkTest01119.java:rules.java.sentinel_java_weak_random:63": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses java.lang.Math.random() to generate a 'rememberMe' cookie value, which is cryptographically insecure and predictable. For security-sensitive tokens like session identifiers or remember-me keys, a cryptographically secure pseudo-random number generator like java.security.SecureRandom must be used."
+ },
+ "BenchmarkTest01142.java:rules.java.sentinel_java_trust_boundary:64": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The application takes an arbitrary HTTP header name from the request and stores it directly into the user's session without validation, which constitutes a trust boundary violation."
+ },
+ "BenchmarkTest01144.java:rules.java.sentinel_java_trust_boundary:64": {
+  "verdict": "true_positive",
+  "confidence": 0.8,
+  "explanation": "The application takes an arbitrary HTTP header name from the request and stores it directly into the user's session, which constitutes a trust boundary violation as untrusted input is used to populate session state."
+ },
+ "BenchmarkTest01146.java:rules.java.sentinel_java_trust_boundary:64": {
+  "verdict": "false_positive",
+  "confidence": 0.9,
+  "explanation": "The code explicitly assigns a hardcoded string 'bob' to the session attribute 'userid' because the switch statement condition is hardcoded to 'B', effectively neutralizing the untrusted input."
+ },
+ "BenchmarkTest01154.java:targets.sast-rules.java.inject.java_inject_rule-LDAPInjection:66": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The LDAP filter string is constructed using string concatenation with untrusted user input ('bar') before being passed to the search method. Although the search method uses the filterArgs parameter, the user input is injected directly into the filter template string, bypassing the protection provided by the parameterization mechanism."
+ },
+ "BenchmarkTest01158.java:targets.sast-rules.java.inject.java_inject_rule-SpotbugsPathTraversalAbsolute:60": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application directly concatenates user-controlled input from a request header into a file path used by FileInputStream without any validation or sanitization, allowing for arbitrary path traversal."
+ },
+ "BenchmarkTest01161.java:targets.sast-rules.java.inject.java_inject_rule-SpotbugsPathTraversalAbsolute:61": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application takes user-controlled input from an HTTP header, processes it without validation, and uses it to construct a file path for FileOutputStream, which allows for arbitrary file write/path traversal."
+ },
+ "BenchmarkTest01179.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:56": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application retrieves the 'Referer' header, performs minimal processing, and writes it directly to the response body with a 'text/html' content type without any sanitization or encoding, which is a classic XSS vulnerability."
+ },
+ "BenchmarkTest01185.java:targets.sast-rules.java.cookie.java_cookie_rule-CookieInsecure:70": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code explicitly sets the 'Secure' flag to false on line 72, which allows the cookie to be transmitted over insecure HTTP connections, violating security best practices."
+ },
+ "BenchmarkTest01193.java:targets.sast-rules.java.inject.java_inject_rule-CommandInjection:78": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application directly incorporates unsanitized user-supplied header input into a command string executed by Runtime.exec(), which is a classic OS command injection vulnerability."
+ },
+ "BenchmarkTest01204.java:rules.java.sentinel_java_trust_boundary:56": {
+  "verdict": "true_positive",
+  "confidence": 0.8,
+  "explanation": "The application takes untrusted input from an HTTP header, processes it, and stores the result directly into the HTTP session without validation, which constitutes a trust boundary violation."
+ },
+ "BenchmarkTest01205.java:rules.java.sentinel_java_trust_boundary:56": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The application takes untrusted input from an HTTP header and stores it directly into the user's session without validation, which can lead to session poisoning or unexpected state manipulation."
+ },
+ "BenchmarkTest01207.java:rules.java.sentinel_java_trust_boundary:56": {
+  "verdict": "false_positive",
+  "confidence": 0.9,
+  "explanation": "The code retrieves a value from a request header, but the subsequent logic in the 'Test' class overwrites the variable 'bar' with a hardcoded string ('a_Value') before it is used as a session attribute key. Therefore, untrusted user input is not actually used as the key."
+ },
+ "BenchmarkTest01223.java:rules.java.sentinel_java_xpath_injection:72": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application constructs an XPath query by concatenating untrusted user input directly into the expression string, allowing for XPath injection attacks."
+ },
+ "BenchmarkTest01223.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:79": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The application retrieves user-controlled input from an HTTP header, processes it, and reflects it directly into the HTML response body at line 79 without any sanitization or encoding, leading to a reflected XSS vulnerability."
+ },
+ "BenchmarkTest01224.java:rules.java.sentinel_java_xpath_injection:70": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application directly concatenates untrusted user input from an HTTP header into an XPath expression, allowing for XPath injection attacks."
+ },
+ "BenchmarkTest01224.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:72": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The application retrieves user-controlled input from an HTTP header and writes it directly to the response output stream without any sanitization or encoding, leading to a clear XSS vulnerability."
+ },
+ "BenchmarkTest01225.java:rules.java.sentinel_java_xpath_injection:70": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application constructs an XPath query by concatenating untrusted user input directly into the query string, which allows for XPath injection attacks."
+ },
+ "BenchmarkTest01225.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:72": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The application reflects user-supplied data from an HTTP header directly into the HTML response body at line 72 without any sanitization or encoding, creating a clear XSS vulnerability."
+ },
+ "BenchmarkTest01229.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherDESInsecure:59": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code explicitly uses the DES algorithm, which is cryptographically broken and considered insecure due to its small key size."
+ },
+ "BenchmarkTest01229.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherIntegrity:59": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses DES, which is a deprecated and insecure cryptographic algorithm with a small key size (56-bit), making it vulnerable to brute-force attacks. Additionally, it uses CBC mode without an authenticated encryption mechanism, failing to provide message integrity."
+ },
+ "BenchmarkTest01229.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherPaddingOracle:59": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses DES/CBC/PKCS5Padding, which is insecure due to the use of a weak cipher (DES) and a mode susceptible to padding oracle attacks. Furthermore, DES is deprecated and considered cryptographically broken."
+ },
+ "BenchmarkTest01235.java:targets.sast-rules.java.inject.java_inject_rule-SpotbugsPathTraversalAbsolute:65": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application takes user-supplied input from a request parameter and directly concatenates it into a file path without any validation or sanitization, allowing for path traversal attacks."
+ },
+ "BenchmarkTest01237.java:targets.sast-rules.java.inject.java_inject_rule-SpotbugsPathTraversalAbsolute:65": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application takes user-controlled input 'param' and directly concatenates it into a file path without any validation or sanitization, allowing for path traversal attacks."
+ },
+ "BenchmarkTest01240.java:targets.sast-rules.java.inject.java_inject_rule-SpotbugsPathTraversalAbsolute:54": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code directly concatenates user-controlled input into a file path without validation, allowing for arbitrary file system access via path traversal sequences."
+ },
+ "BenchmarkTest01241.java:targets.sast-rules.java.inject.java_inject_rule-LDAPInjection:62": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application constructs an LDAP filter string by concatenating untrusted user input ('bar') directly into the filter expression, which is then executed via 'idc.search'. Although the 'filters' parameter is used, it only contains a static string, leaving the 'bar' variable vulnerable to LDAP injection."
+ },
+ "BenchmarkTest01242.java:targets.sast-rules.java.inject.java_inject_rule-LDAPInjection:62": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application constructs an LDAP filter string by concatenating user-controlled input ('bar') directly into the filter expression, which is then passed to the 'search' method. Even though the 'search' method is called with a 'filterArgs' array, the user input is not part of the parameterized '{0}' placeholder, making it vulnerable to LDAP injection."
+ },
+ "BenchmarkTest01244.java:targets.sast-rules.java.crypto.java_crypto_rule-WeakMessageDigest:54": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code explicitly uses SHA-1, which is a cryptographically broken hash algorithm, to process sensitive input intended for storage in a password file."
+ },
+ "BenchmarkTest01244.java:targets.sast-rules.java.crypto.java_crypto_rule-WeakMessageDigest:56": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses the SHA1 algorithm, which is cryptographically broken and vulnerable to collision attacks, to hash sensitive data (passwords) for storage."
+ },
+ "BenchmarkTest01252.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:50": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application takes user-supplied input from a request parameter and writes it directly to the HTTP response using format() without any sanitization or encoding, which allows for reflected XSS."
+ },
+ "BenchmarkTest01265.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:52": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application takes user-supplied input from a request parameter and writes it directly to the HTTP response without any sanitization or encoding, while explicitly disabling browser-side XSS protection."
+ },
+ "BenchmarkTest01281.java:targets.sast-rules.java.cookie.java_cookie_rule-CookieInsecure:63": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code explicitly sets the Secure flag to false on line 65, which allows the cookie to be transmitted over unencrypted HTTP connections, violating security best practices."
+ },
+ "BenchmarkTest01281.java:targets.sast-rules.java.cookie.java_cookie_rule-HttpResponseSplitting:63": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The application takes user-supplied input from a request parameter and uses it directly to construct a Cookie object without validation or sanitization, which can lead to HTTP response splitting if the underlying servlet container does not strictly enforce RFC 6265."
+ },
+ "BenchmarkTest01283.java:targets.sast-rules.java.cookie.java_cookie_rule-CookieInsecure:63": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code explicitly sets the 'Secure' flag to 'false' on line 65, which allows the cookie to be transmitted over insecure HTTP connections, violating security best practices."
+ },
+ "BenchmarkTest01283.java:targets.sast-rules.java.cookie.java_cookie_rule-HttpResponseSplitting:63": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The application takes unsanitized user input from a request parameter and directly uses it to construct a javax.servlet.http.Cookie object, which is then added to the response. This allows for HTTP Response Splitting if the underlying servlet container does not strictly enforce RFC 6265 validation."
+ },
+ "BenchmarkTest01286.java:targets.sast-rules.java.inject.java_inject_rule-CommandInjection:69": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application takes user-supplied input from a request parameter and passes it directly into an OS command execution function (Runtime.exec) without any validation or sanitization, which is a classic command injection vulnerability."
+ },
+ "BenchmarkTest01316.java:rules.java.sentinel_java_xpath_injection:63": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application directly concatenates user-controlled input into an XPath expression without sanitization or parameterization, allowing for XPath injection attacks."
+ },
+ "BenchmarkTest01316.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:65": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application directly reflects user-controlled input ('bar') into the HTTP response body without any sanitization or encoding, which allows for Cross-Site Scripting (XSS)."
+ },
+ "BenchmarkTest01320.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherDESInsecure:64": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses the DES algorithm, which is cryptographically broken and considered insecure due to its short key length and susceptibility to brute-force attacks."
+ },
+ "BenchmarkTest01320.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherIntegrity:64": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses DES, which is a deprecated and cryptographically broken algorithm with a small 56-bit key size, making it vulnerable to brute-force attacks. Additionally, it uses CBC mode without an explicit integrity check (MAC), which is susceptible to padding oracle attacks."
+ },
+ "BenchmarkTest01320.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherPaddingOracle:64": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses DES/CBC/PKCS5Padding, which is both cryptographically broken due to the short 56-bit key length of DES and vulnerable to padding oracle attacks due to the use of CBC mode with PKCS5Padding."
+ },
+ "BenchmarkTest01325.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherDESedeInsecure:56": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses DESede (TripleDES) and DES, which are cryptographically broken and insecure algorithms. The configuration is loaded from a properties file, but the default value 'DESede/ECB/PKCS5Padding' explicitly uses an insecure algorithm and mode."
+ },
+ "BenchmarkTest01325.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherECBMode:56": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses 'DESede/ECB/PKCS5Padding' as a default cryptographic algorithm, which is insecure due to the use of ECB mode and a deprecated block cipher (DESede). ECB mode does not provide message integrity and is vulnerable to pattern analysis."
+ },
+ "BenchmarkTest01325.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherIntegrity:56": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses 'DESede/ECB/PKCS5Padding' as the default cryptographic algorithm, which is insecure due to the use of ECB mode and a deprecated block cipher. ECB mode does not provide message integrity and is vulnerable to pattern analysis."
+ },
+ "BenchmarkTest01326.java:targets.sast-rules.java.inject.java_inject_rule-LDAPInjection:63": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application constructs an LDAP filter string by concatenating user-controlled input ('bar') directly into the filter expression. Although the 'ctx.search' method is called with a filter argument array, the user input is placed outside of the parameterized portion of the filter string, rendering the parameterization ineffective against injection."
+ },
+ "BenchmarkTest01327.java:targets.sast-rules.java.inject.java_inject_rule-LDAPInjection:63": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application constructs an LDAP filter string using unsanitized user input ('bar') via string concatenation, which is then passed to the 'ctx.search' method. While the 'filters' array is used for the second part of the query, the first part containing 'bar' remains vulnerable to LDAP injection."
+ },
+ "BenchmarkTest01331.java:targets.sast-rules.java.inject.java_inject_rule-SpotbugsPathTraversalAbsolute:58": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application directly concatenates user-controlled input into a file path used by FileOutputStream without any validation or sanitization, which is a classic path traversal vulnerability."
+ },
+ "BenchmarkTest01335.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:56": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application takes user-supplied input from a request parameter and writes it directly into an HTML response without any sanitization or encoding, creating a clear XSS vulnerability."
+ },
+ "BenchmarkTest01340.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:53": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application retrieves user input from the request and writes it directly to the HTTP response without any sanitization or encoding, while explicitly setting the content type to text/html."
+ },
+ "BenchmarkTest01354.java:rules.java.sentinel_java_weak_random:52": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses java.util.Random to generate a 'rememberMe' cookie value, which is cryptographically insecure and predictable, making it vulnerable to session hijacking."
+ },
+ "BenchmarkTest01376.java:rules.java.sentinel_java_trust_boundary:53": {
+  "verdict": "true_positive",
+  "confidence": 0.8,
+  "explanation": "The application takes untrusted user input from a request parameter and stores it directly into the HTTP session without validation, which can lead to session fixation or session pollution vulnerabilities."
+ },
+ "BenchmarkTest01377.java:rules.java.sentinel_java_trust_boundary:53": {
+  "verdict": "true_positive",
+  "confidence": 0.8,
+  "explanation": "The application takes untrusted user input from a request parameter and stores it directly into the HTTP session without validation, which can lead to session fixation or data pollution vulnerabilities."
+ },
+ "BenchmarkTest01385.java:rules.java.sentinel_java_sqli:58": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The SQL query string is constructed using string concatenation with the 'bar' variable, which contains untrusted user input, before being passed to the PreparedStatement constructor."
+ },
+ "BenchmarkTest01392.java:rules.java.sentinel_java_sqli:57": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application constructs an SQL query by concatenating untrusted input directly into the query string, which is a classic SQL injection vulnerability."
+ },
+ "BenchmarkTest01394.java:rules.java.sentinel_java_sqli:57": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application directly concatenates untrusted user input from the request parameter into an SQL query string, which is a classic SQL injection vulnerability."
+ },
+ "BenchmarkTest01397.java:rules.java.sentinel_java_xpath_injection:67": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application directly concatenates untrusted user input into an XPath expression without sanitization or the use of variable resolvers, allowing for XPath injection."
+ },
+ "BenchmarkTest01397.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:69": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application takes user-supplied input from a request parameter and reflects it directly into the HTTP response body without any sanitization or encoding, which constitutes a classic reflected XSS vulnerability."
+ },
+ "BenchmarkTest01398.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherDESInsecure:74": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses the DES algorithm, which is cryptographically broken and considered insecure due to its short key length and susceptibility to brute-force attacks."
+ },
+ "BenchmarkTest01398.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherIntegrity:74": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses DES, which is a deprecated and cryptographically broken algorithm with a small 56-bit key size, and CBC mode without an authentication tag, making it vulnerable to padding oracle attacks and brute-force."
+ },
+ "BenchmarkTest01398.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherPaddingOracle:74": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses DES, which is a broken and deprecated cipher with a small 64-bit block size, in CBC mode with PKCS5Padding, which is vulnerable to padding oracle attacks."
+ },
+ "BenchmarkTest01401.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherECBMode:76": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses 'AES/ECB/PKCS5Padding' as a default cryptographic algorithm, which is insecure because ECB mode does not provide message integrity and is vulnerable to pattern analysis."
+ },
+ "BenchmarkTest01401.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherIntegrity:76": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application retrieves the cryptographic algorithm from a properties file and defaults to 'AES/ECB/PKCS5Padding'. ECB mode is insecure because it does not provide semantic security or integrity, making it vulnerable to pattern analysis and tampering."
+ },
+ "BenchmarkTest01402.java:targets.sast-rules.java.inject.java_inject_rule-LDAPInjection:73": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The code constructs an LDAP filter string by concatenating untrusted user input ('bar') directly into the filter expression, which is then passed to the 'ctx.search' method. While the method uses the 'filters' array for the '{0}' placeholder, the concatenation of 'bar' remains vulnerable to LDAP injection."
+ },
+ "BenchmarkTest01420.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:63": {
+  "verdict": "false_positive",
+  "confidence": 0.9,
+  "explanation": "The user input is passed through ESAPI's encodeForHTML method before being written to the response, which effectively mitigates the XSS vulnerability."
+ },
+ "BenchmarkTest01429.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:63": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application retrieves a user-controlled parameter and writes it directly to the HTTP response without any sanitization or encoding, while explicitly setting the content type to text/html and disabling XSS protection headers."
+ },
+ "BenchmarkTest01439.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:63": {
+  "verdict": "false_positive",
+  "confidence": 0.9,
+  "explanation": "The code retrieves the parameter name based on a hardcoded value 'BenchmarkTest01439' and then overwrites the variable 'bar' with a hardcoded string 'a_Value' before writing it to the response, effectively neutralizing the user input."
+ },
+ "BenchmarkTest01446.java:targets.sast-rules.java.inject.java_inject_rule-CommandInjection:73": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application concatenates user-controlled input (retrieved via request parameters) directly into the command string passed to Runtime.exec(), which is a classic OS command injection vulnerability."
+ },
+ "BenchmarkTest01456.java:rules.java.sentinel_java_trust_boundary:63": {
+  "verdict": "true_positive",
+  "confidence": 0.8,
+  "explanation": "The application takes untrusted user input from request parameters and stores it directly into the HTTP session without validation or sanitization, which can lead to session poisoning or other session-related vulnerabilities."
+ },
+ "BenchmarkTest01473.java:rules.java.sentinel_java_sqli:67": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application constructs an SQL query by concatenating untrusted user input directly into the query string, which is then executed via Statement.execute(). This is a classic SQL injection vulnerability."
+ },
+ "BenchmarkTest01478.java:rules.java.sentinel_java_xpath_injection:79": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application directly concatenates untrusted user input into an XPath expression, which allows for XPath injection attacks."
+ },
+ "BenchmarkTest01478.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:86": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The application retrieves user-controlled input and writes it directly to the response stream at line 86 without any HTML encoding, which allows for reflected XSS."
+ },
+ "BenchmarkTest01479.java:rules.java.sentinel_java_xpath_injection:79": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application constructs an XPath expression by concatenating untrusted user input directly into the query string, which allows for XPath injection attacks."
+ },
+ "BenchmarkTest01479.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:86": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The application retrieves user-supplied data from the request and writes it directly to the response output stream without any HTML encoding, which leads to a Cross-Site Scripting (XSS) vulnerability."
+ },
+ "BenchmarkTest01490.java:targets.sast-rules.java.inject.java_inject_rule-LDAPInjection:61": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The LDAP filter string is constructed using string concatenation with untrusted input 'bar' (derived from request parameters), which is then passed to the LDAP search method. While the search method uses filter arguments, those arguments are only applied to the '{0}' placeholder, leaving the concatenated 'bar' variable vulnerable to LDAP injection."
+ },
+ "BenchmarkTest01498.java:targets.sast-rules.java.inject.java_inject_rule-SpotbugsPathTraversalAbsolute:62": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application constructs a file path using unsanitized user input ('param') and passes it directly to a FileInputStream constructor, which allows for arbitrary file access via path traversal."
+ },
+ "BenchmarkTest01501.java:targets.sast-rules.java.inject.java_inject_rule-LDAPInjection:63": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application constructs an LDAP filter string by directly concatenating user-supplied input ('bar') without any sanitization or the use of parameterized search arguments, making it vulnerable to LDAP injection."
+ },
+ "BenchmarkTest01521.java:targets.sast-rules.java.cookie.java_cookie_rule-CookieInsecure:65": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code explicitly sets the 'Secure' flag to 'false' on line 67, which allows the cookie to be transmitted over insecure HTTP connections, violating security best practices."
+ },
+ "BenchmarkTest01526.java:targets.sast-rules.java.inject.java_inject_rule-CommandInjection:59": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application uses user-supplied input (param) directly in the Runtime.exec() method without any sanitization or validation, which allows for OS command injection."
+ },
+ "BenchmarkTest01561.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:74": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The application retrieves user-supplied input from the request and writes it directly to the HTTP response without any sanitization or encoding, which allows for reflected Cross-Site Scripting (XSS)."
+ },
+ "BenchmarkTest01562.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:74": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The application reflects user-controlled input (retrieved from an XML node content) directly into the HTTP response without any sanitization or encoding, leading to a potential XSS vulnerability."
+ },
+ "BenchmarkTest01574.java:targets.sast-rules.java.inject.java_inject_rule-SpotbugsPathTraversalAbsolute:56": {
+  "verdict": "false_positive",
+  "confidence": 1.0,
+  "explanation": "The code explicitly overwrites the user-controlled variable 'bar' with a hardcoded safe value ('a_Value') before it is used to construct the file path, rendering the path traversal vulnerability unreachable."
+ },
+ "BenchmarkTest01577.java:targets.sast-rules.java.crypto.java_crypto_rule-WeakMessageDigest:51": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses the MD5 algorithm, which is cryptographically broken and vulnerable to collision attacks, to hash potentially sensitive data before storing it in a file."
+ },
+ "BenchmarkTest01593.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:51": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application takes user input from a request parameter and writes it directly to the HTTP response without any sanitization or encoding, while explicitly disabling browser-side XSS protection."
+ },
+ "BenchmarkTest01600.java:targets.sast-rules.java.inject.java_inject_rule-CommandInjection:64": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application takes user-supplied input from a request parameter and concatenates it directly into a command string executed by ProcessBuilder, which is a classic OS command injection vulnerability."
+ },
+ "BenchmarkTest01604.java:targets.sast-rules.java.cookie.java_cookie_rule-HttpResponseSplitting:65": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The application takes untrusted user input from a request parameter and uses it directly to construct a javax.servlet.http.Cookie object without any validation or sanitization, which can lead to HTTP response splitting or cookie injection."
+ },
+ "BenchmarkTest01605.java:targets.sast-rules.java.cookie.java_cookie_rule-HttpResponseSplitting:65": {
+  "verdict": "false_positive",
+  "confidence": 0.9,
+  "explanation": "The code uses the javax.servlet.http.Cookie class, which automatically validates and sanitizes the cookie value to prevent HTTP response splitting, making the manual validation unnecessary in modern Java EE/Jakarta EE environments."
+ },
+ "BenchmarkTest01609.java:targets.sast-rules.java.inject.java_inject_rule-CommandInjection:61": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application directly concatenates user-controlled input ('bar') into a string that is passed to Runtime.exec(), allowing for OS command injection."
+ },
+ "BenchmarkTest01616.java:rules.java.sentinel_java_trust_boundary:51": {
+  "verdict": "true_positive",
+  "confidence": 0.8,
+  "explanation": "The application takes untrusted user input from a request parameter and stores it directly into the HTTP session without validation, which constitutes a trust boundary violation."
+ },
+ "BenchmarkTest01632.java:rules.java.sentinel_java_xpath_injection:67": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application constructs an XPath query by concatenating untrusted user input directly into the expression string, which allows for XPath injection attacks."
+ },
+ "BenchmarkTest01632.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:74": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The application retrieves user-supplied data from an HTTP request and writes it directly to the response output without any sanitization or encoding, which is a classic XSS vulnerability."
+ },
+ "BenchmarkTest01647.java:targets.sast-rules.java.inject.java_inject_rule-SpotbugsPathTraversalAbsolute:78": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code directly concatenates user-controlled input (param) into a file path used in a FileOutputStream without any validation or sanitization, allowing for arbitrary path traversal."
+ },
+ "BenchmarkTest01648.java:rules.java.sentinel_java_weak_random:72": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses Math.random() to generate a 'rememberMe' token, which is a cryptographically weak pseudo-random number generator unsuitable for security-sensitive identifiers."
+ },
+ "BenchmarkTest01649.java:targets.sast-rules.java.crypto.java_crypto_rule-WeakMessageDigest:73": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses SHA-1, which is a cryptographically broken hash algorithm, to process sensitive data (indicated by the filename 'passwordFile.txt'). SHA-1 is vulnerable to collision attacks and should not be used for security-sensitive operations."
+ },
+ "BenchmarkTest01673.java:targets.sast-rules.java.inject.java_inject_rule-CommandInjection:84": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code directly concatenates user-controlled input ('bar') into a shell command string ('echo ' + bar) which is then executed via ProcessBuilder. This allows an attacker to inject arbitrary shell commands by including shell metacharacters in the input."
+ },
+ "BenchmarkTest01678.java:rules.java.sentinel_java_weak_random:72": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The code uses java.util.Random to generate a 'rememberMe' cookie value, which is cryptographically insecure and predictable, making it unsuitable for session or authentication tokens."
+ },
+ "BenchmarkTest01682.java:targets.sast-rules.java.cookie.java_cookie_rule-CookieInsecure:87": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code explicitly sets the Secure flag to false on line 89, which allows the cookie to be transmitted over unencrypted HTTP connections, violating security best practices."
+ },
+ "BenchmarkTest01683.java:targets.sast-rules.java.cookie.java_cookie_rule-CookieInsecure:87": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code explicitly sets the cookie's secure attribute to false via cookie.setSecure(false), which allows the cookie to be transmitted over unencrypted HTTP connections, violating security best practices."
+ },
+ "BenchmarkTest01690.java:targets.sast-rules.java.inject.java_inject_rule-CommandInjection:80": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application takes untrusted user input from the query string and passes it directly into the Runtime.exec() method, which is a classic OS command injection vulnerability."
+ },
+ "BenchmarkTest01692.java:targets.sast-rules.java.inject.java_inject_rule-CommandInjection:83": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application concatenates untrusted user input (param) into a command string executed by Runtime.exec(), which is a classic OS command injection vulnerability."
+ },
+ "BenchmarkTest01698.java:rules.java.sentinel_java_weak_random:132": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The method uses java.util.Random, which is cryptographically insecure and predictable. For security-sensitive operations, java.security.SecureRandom should be used instead."
+ },
+ "BenchmarkTest01734.java:rules.java.sentinel_java_xpath_injection:89": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application constructs an XPath expression by directly concatenating untrusted user input ('bar') into the query string, which allows an attacker to manipulate the query logic via XPath injection."
+ },
+ "BenchmarkTest01734.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:96": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The application retrieves user-supplied data and writes it directly to the response stream at line 96 without any HTML encoding, which allows for reflected Cross-Site Scripting (XSS)."
+ },
+ "BenchmarkTest01735.java:rules.java.sentinel_java_xpath_injection:89": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application constructs an XPath expression using unsanitized user input from the request, allowing an attacker to manipulate the query logic via XPath injection."
+ },
+ "BenchmarkTest01735.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:96": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The application retrieves user-supplied data and writes it directly to the response stream at line 96 without any HTML encoding or sanitization, creating a clear XSS vulnerability."
+ },
+ "BenchmarkTest01736.java:rules.java.sentinel_java_xpath_injection:87": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application constructs an XPath expression by concatenating untrusted user input directly into the query string, which allows an attacker to manipulate the query logic via XPath injection."
+ },
+ "BenchmarkTest01736.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:89": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The application retrieves user-supplied input via a query parameter and reflects it directly into the HTTP response at line 89 without any sanitization or encoding, creating a clear XSS vulnerability."
+ },
+ "BenchmarkTest01740.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherDESedeInsecure:53": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses 'DESede/ECB/PKCS5Padding' as a default cryptographic algorithm, which is insecure due to the use of the broken DESede algorithm and the insecure ECB mode of operation."
+ },
+ "BenchmarkTest01740.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherECBMode:53": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses a configurable algorithm string that defaults to 'DESede/ECB/PKCS5Padding'. ECB mode is insecure as it does not provide message integrity and is vulnerable to pattern analysis, and DESede is considered a legacy/weak algorithm."
+ },
+ "BenchmarkTest01740.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherIntegrity:53": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses DESede/ECB/PKCS5Padding, which is a weak, legacy cryptographic algorithm that lacks modern integrity protections and is vulnerable to various attacks."
+ },
+ "BenchmarkTest01743.java:targets.sast-rules.java.inject.java_inject_rule-LDAPInjection:60": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application constructs an LDAP filter string by concatenating user-controlled input ('bar') directly into the filter expression, which is then passed to the LDAP search method. Although the 'filters' array is used for the second part of the query, the first part remains vulnerable to LDAP injection."
+ },
+ "BenchmarkTest01753.java:targets.sast-rules.java.inject.java_inject_rule-LDAPInjection:63": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The application constructs an LDAP filter string using unsanitized user input ('bar') via string concatenation, which is then passed to the 'search' method. While the 'search' method uses 'filterArgs', the injection occurs in the part of the filter string built via concatenation, rendering the parameterization ineffective for that portion."
+ },
+ "BenchmarkTest01754.java:targets.sast-rules.java.inject.java_inject_rule-LDAPInjection:63": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application constructs an LDAP filter string by concatenating untrusted user input ('bar') directly into the query string, which is then passed to the 'search' method. While the 'search' method is provided with an array of arguments, the user-controlled 'bar' variable is not part of those arguments and is instead embedded directly into the filter template, leading to a classic LDAP injection vulnerability."
+ },
+ "BenchmarkTest01755.java:targets.sast-rules.java.inject.java_inject_rule-LDAPInjection:62": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code constructs an LDAP filter string by directly concatenating untrusted user input ('bar') into the query string, which is then passed to 'idc.search(base, filter, sc)'. This is a classic LDAP injection vulnerability because the application fails to use the parameterized search method that performs automatic encoding."
+ },
+ "BenchmarkTest01756.java:targets.sast-rules.java.inject.java_inject_rule-LDAPInjection:62": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code constructs an LDAP filter string by directly concatenating untrusted user input ('bar'), which is then passed to 'idc.search'. This is a classic LDAP injection vulnerability as it does not use the parameterized 'filterArgs' method to safely handle the input."
+ },
+ "BenchmarkTest01776.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:53": {
+  "verdict": "false_positive",
+  "confidence": 0.9,
+  "explanation": "Although the code is flagged for XSS, the variable 'bar' is explicitly overwritten with a hardcoded safe string ('a_Value') on line 68 before being returned, effectively neutralizing the user-supplied input."
+ },
+ "BenchmarkTest01789.java:targets.sast-rules.java.cookie.java_cookie_rule-CookieInsecure:64": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code explicitly sets the Secure flag to false on line 66, which allows the cookie to be transmitted over unencrypted HTTP connections, violating security best practices."
+ },
+ "BenchmarkTest01792.java:targets.sast-rules.java.inject.java_inject_rule-CommandInjection:72": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application takes user-controlled input from the request and directly concatenates it into a command string executed by Runtime.exec(), which is a classic OS command injection vulnerability."
+ },
+ "BenchmarkTest01794.java:targets.sast-rules.java.inject.java_inject_rule-CommandInjection:72": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application directly incorporates untrusted user input ('bar') into an OS command execution string without any sanitization or validation, leading to a clear command injection vulnerability."
+ },
+ "BenchmarkTest01808.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:57": {
+  "verdict": "false_positive",
+  "confidence": 0.9,
+  "explanation": "The code at line 57 outputs the result of a database query (an Integer), not the user-supplied parameter directly. Since the output is a numeric value, there is no risk of XSS injection."
+ },
+ "BenchmarkTest01822.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherDESInsecure:80": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code explicitly uses the DES algorithm, which is cryptographically broken and considered insecure due to its short key length."
+ },
+ "BenchmarkTest01823.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherDESInsecure:80": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses the DES algorithm, which is cryptographically broken and considered insecure due to its short key length (56 bits), making it vulnerable to brute-force attacks."
+ },
+ "BenchmarkTest01831.java:targets.sast-rules.java.inject.java_inject_rule-LDAPInjection:79": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application constructs an LDAP filter string by concatenating untrusted user input ('bar') directly into the filter expression on line 75, which is then passed to the 'ctx.search' method. Even though the method uses the 'filters' array for the '{0}' placeholder, the concatenation of 'bar' remains vulnerable to LDAP injection."
+ },
+ "BenchmarkTest01832.java:targets.sast-rules.java.inject.java_inject_rule-LDAPInjection:79": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application constructs an LDAP filter string by concatenating untrusted input 'bar' directly into the filter expression, which is then passed to 'ctx.search'. Even though the method signature supports 'filterArgs' for safe parameterization, the vulnerable part of the string is concatenated manually, allowing for LDAP injection."
+ },
+ "BenchmarkTest01837.java:targets.sast-rules.java.inject.java_inject_rule-SpotbugsPathTraversalAbsolute:88": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application takes user-controlled input from a cookie, processes it, and directly uses it to construct a file path via java.io.File without any validation or sanitization, leading to a clear path traversal vulnerability."
+ },
+ "BenchmarkTest01844.java:targets.sast-rules.java.crypto.java_crypto_rule-WeakMessageDigest:74": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code explicitly uses SHA1, which is a cryptographically broken hash algorithm, for hashing sensitive data (passwords) before storing them in a file."
+ },
+ "BenchmarkTest01844.java:targets.sast-rules.java.crypto.java_crypto_rule-WeakMessageDigest:76": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code explicitly uses SHA1, which is a cryptographically broken hash algorithm, to process and store sensitive data (passwords) in a file."
+ },
+ "BenchmarkTest01850.java:targets.sast-rules.java.inject.java_inject_rule-CommandInjection:80": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application directly concatenates user-controlled input (retrieved from a cookie) into a command string passed to the shell, allowing for arbitrary command execution."
+ },
+ "BenchmarkTest01867.java:rules.java.sentinel_java_weak_random:128": {
+  "verdict": "false_positive",
+  "confidence": 0.9,
+  "explanation": "The method getNextNumber accepts a java.util.Random object as a parameter, meaning the caller is responsible for providing a cryptographically secure instance if necessary. The method itself is a generic utility and does not inherently introduce a vulnerability."
+ },
+ "BenchmarkTest01872.java:rules.java.sentinel_java_trust_boundary:69": {
+  "verdict": "true_positive",
+  "confidence": 0.8,
+  "explanation": "The application uses untrusted input derived from a cookie to define the key in an HttpSession object, which can lead to session pollution or denial of service."
+ },
+ "BenchmarkTest01873.java:rules.java.sentinel_java_trust_boundary:69": {
+  "verdict": "true_positive",
+  "confidence": 0.8,
+  "explanation": "The application retrieves a value from a user-controlled cookie and stores it directly into the HTTP session without validation, which constitutes a trust boundary violation."
+ },
+ "BenchmarkTest01874.java:rules.java.sentinel_java_trust_boundary:69": {
+  "verdict": "true_positive",
+  "confidence": 0.8,
+  "explanation": "The application uses untrusted input from a cookie to define the key in a session attribute, which can lead to session pollution or denial of service by allowing an attacker to overwrite or fill the session with arbitrary keys."
+ },
+ "BenchmarkTest01879.java:rules.java.sentinel_java_sqli:75": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code constructs an SQL query by concatenating untrusted input (the cookie value) directly into the query string, which is then passed to a PreparedStatement. This bypasses the security benefits of parameterized queries and allows for SQL injection."
+ },
+ "BenchmarkTest01880.java:rules.java.sentinel_java_sqli:75": {
+  "verdict": "false_positive",
+  "confidence": 0.9,
+  "explanation": "Although the SQL string is constructed using concatenation, the variable 'bar' is overwritten with a hardcoded string 'a_Value' inside the 'doSomething' method before being used, effectively neutralizing the injection risk."
+ },
+ "BenchmarkTest01886.java:rules.java.sentinel_java_sqli:73": {
+  "verdict": "false_positive",
+  "confidence": 0.9,
+  "explanation": "The untrusted input from the cookie is passed through a complex transformation chain in 'doSomething', which ultimately returns a hardcoded string ('barbarians_at_the_gate') rather than the tainted input, rendering the SQL injection impossible."
+ },
+ "BenchmarkTest01892.java:rules.java.sentinel_java_xpath_injection:85": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application constructs an XPath query by directly concatenating user-controlled input (from a cookie) into the query string, which allows for XPath injection attacks."
+ },
+ "BenchmarkTest01892.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:92": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The application retrieves user-controlled input from a cookie and writes it directly to the HTTP response without any sanitization or encoding, leading to a reflected XSS vulnerability."
+ },
+ "BenchmarkTest01893.java:rules.java.sentinel_java_xpath_injection:85": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application constructs an XPath expression by concatenating untrusted user input (from a cookie) directly into the query string, which allows for XPath injection."
+ },
+ "BenchmarkTest01893.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:92": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The application retrieves a value from a cookie, processes it, and writes it directly to the response stream within an HTML context without any sanitization or encoding, leading to a potential XSS vulnerability."
+ },
+ "BenchmarkTest01894.java:rules.java.sentinel_java_xpath_injection:83": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application constructs an XPath query by concatenating untrusted user input (retrieved from a cookie) directly into the query string, which allows for XPath injection attacks."
+ },
+ "BenchmarkTest01894.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:85": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application retrieves a value from a cookie, which is user-controlled input, and writes it directly to the HTTP response without any sanitization or encoding, leading to a clear XSS vulnerability."
+ },
+ "BenchmarkTest01897.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherDESInsecure:64": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses the DES algorithm, which is cryptographically broken and considered insecure due to its short key length."
+ },
+ "BenchmarkTest01897.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherIntegrity:64": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses DES, which is a broken and deprecated cryptographic algorithm with a small key size, and it is used in CBC mode without an authenticated encryption mechanism, failing to provide message integrity."
+ },
+ "BenchmarkTest01897.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherPaddingOracle:64": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses DES/CBC/PKCS5Padding, which is both cryptographically broken due to the short key length of DES and vulnerable to padding oracle attacks when used in CBC mode."
+ },
+ "BenchmarkTest01898.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherDESInsecure:64": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code explicitly uses the DES algorithm, which is cryptographically broken and insecure due to its short 56-bit key length."
+ },
+ "BenchmarkTest01898.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherIntegrity:64": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses DES, which is a deprecated and cryptographically broken algorithm with a small key size, and it is used in CBC mode without an authentication tag, making it vulnerable to padding oracle attacks and ciphertext tampering."
+ },
+ "BenchmarkTest01898.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherPaddingOracle:64": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses DES/CBC/PKCS5Padding, which is vulnerable to padding oracle attacks. Furthermore, DES is considered cryptographically broken due to its short key length."
+ },
+ "BenchmarkTest01908.java:targets.sast-rules.java.inject.java_inject_rule-SpotbugsPathTraversalAbsolute:57": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application directly concatenates user-controlled input from an HTTP header into a file path without validation, allowing for arbitrary file access via path traversal sequences (e.g., ../)."
+ },
+ "BenchmarkTest01909.java:targets.sast-rules.java.inject.java_inject_rule-LDAPInjection:66": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code constructs an LDAP filter string by directly concatenating user-supplied input ('bar') without any sanitization or the use of parameterized search arguments, leading to a classic LDAP injection vulnerability."
+ },
+ "BenchmarkTest01928.java:targets.sast-rules.java.inject.java_inject_rule-CommandInjection:67": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application takes user-controlled input from a request header, processes it, and concatenates it directly into a shell command string ('echo ' + bar) which is then executed via ProcessBuilder. This allows for arbitrary command injection by including shell metacharacters in the input."
+ },
+ "BenchmarkTest01932.java:rules.java.sentinel_java_weak_random:53": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses java.util.Random to generate a 'rememberMe' cookie value, which is a security-sensitive identifier. java.util.Random is cryptographically insecure and predictable, making it unsuitable for session management or authentication tokens."
+ },
+ "BenchmarkTest01935.java:targets.sast-rules.java.cookie.java_cookie_rule-HttpResponseSplitting:68": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The application takes untrusted user input from an HTTP header, performs URL decoding, and directly uses it to construct a javax.servlet.http.Cookie object without validation. This allows for potential HTTP response splitting or cookie injection attacks if the underlying servlet container does not strictly enforce RFC 6265."
+ },
+ "BenchmarkTest01941.java:targets.sast-rules.java.inject.java_inject_rule-CommandInjection:61": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application takes user-supplied input from an HTTP header, processes it, and passes it directly into the environment variables array of a Runtime.exec() call. This allows an attacker to inject malicious environment variables, which can influence the behavior of the executed command."
+ },
+ "BenchmarkTest01942.java:targets.sast-rules.java.inject.java_inject_rule-CommandInjection:64": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application takes untrusted user input from an HTTP header, performs no validation or sanitization, and concatenates it directly into a string that is executed as an OS command via Runtime.exec()."
+ },
+ "BenchmarkTest01956.java:rules.java.sentinel_java_trust_boundary:54": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The application takes untrusted user input from an HTTP header and uses it directly as a key in the HTTP session, which can lead to session pollution or denial of service."
+ },
+ "BenchmarkTest01960.java:rules.java.sentinel_java_trust_boundary:54": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The application takes untrusted input directly from an HTTP header and stores it in the user's session without validation or sanitization, which can lead to session poisoning or other session-based vulnerabilities."
+ },
+ "BenchmarkTest01969.java:rules.java.sentinel_java_sqli:58": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application constructs a SQL query by concatenating untrusted user input from an HTTP header directly into the query string, which is then executed via statement.addBatch(). This is a classic SQL injection vulnerability."
+ },
+ "BenchmarkTest01972.java:rules.java.sentinel_java_sqli:58": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code directly concatenates untrusted input from an HTTP header into an SQL query string, which is a classic SQL injection vulnerability."
+ },
+ "BenchmarkTest01974.java:rules.java.sentinel_java_xpath_injection:70": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application constructs an XPath query by concatenating untrusted user input directly into the query string, which allows for XPath injection attacks."
+ },
+ "BenchmarkTest01974.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:77": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The application retrieves user-supplied data from an HTTP header and writes it directly to the response output without any sanitization or encoding, creating a clear XSS vulnerability."
+ },
+ "BenchmarkTest01990.java:targets.sast-rules.java.inject.java_inject_rule-SpotbugsPathTraversalAbsolute:69": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application uses unsanitized user-supplied header names to construct a file path, allowing for arbitrary path traversal attacks."
+ },
+ "BenchmarkTest02003.java:rules.java.sentinel_java_weak_random:63": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses java.util.Random to generate a 'rememberMe' cookie value, which is cryptographically insecure and predictable, making it unsuitable for session or authentication tokens."
+ },
+ "BenchmarkTest02005.java:targets.sast-rules.java.cookie.java_cookie_rule-CookieInsecure:78": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code explicitly sets the 'Secure' flag to 'false' on line 80, which allows the cookie to be transmitted over unencrypted HTTP connections, violating security best practices."
+ },
+ "BenchmarkTest02032.java:targets.sast-rules.java.inject.java_inject_rule-SpotbugsPathTraversalAbsolute:60": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code directly concatenates user-controlled input from a request header into a file path used by FileInputStream without any validation or sanitization, allowing for arbitrary path traversal."
+ },
+ "BenchmarkTest02036.java:targets.sast-rules.java.inject.java_inject_rule-LDAPInjection:69": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application constructs an LDAP filter string by concatenating untrusted user input (variable 'bar') directly into the query, which is then executed via idc.search. Although the search method is called with a filterArgs array, the user input is not part of that array; instead, it is embedded directly into the filter string, bypassing the automatic encoding provided by the API."
+ },
+ "BenchmarkTest02037.java:targets.sast-rules.java.inject.java_inject_rule-LDAPInjection:69": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code constructs an LDAP filter string using unsanitized user input ('bar') via string concatenation, which is then passed to the 'search' method. While the 'search' method is called with an object array, the user input is embedded directly into the filter string rather than being passed as a parameter, rendering the automatic encoding ineffective."
+ },
+ "BenchmarkTest02046.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:56": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application retrieves a value from the 'Referer' header, performs no sanitization or encoding, and writes it directly to the HTTP response with a 'text/html' content type, creating a clear XSS vulnerability."
+ },
+ "BenchmarkTest02086.java:rules.java.sentinel_java_trust_boundary:56": {
+  "verdict": "false_positive",
+  "confidence": 0.9,
+  "explanation": "The code explicitly assigns a hardcoded string 'bob' to the session attribute 'userid' because the switch condition is fixed to 'B', rendering the untrusted input irrelevant to the session state."
+ },
+ "BenchmarkTest02092.java:rules.java.sentinel_java_sqli:60": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application constructs an SQL query by directly concatenating user-controlled input from an HTTP header, which is vulnerable to SQL injection."
+ },
+ "BenchmarkTest02100.java:rules.java.sentinel_java_xpath_injection:72": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application directly concatenates untrusted user input from an HTTP header into an XPath expression without validation or the use of variable resolvers, allowing for XPath injection."
+ },
+ "BenchmarkTest02100.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:79": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The application retrieves user-supplied data from an HTTP header and writes it directly to the response output at line 79 without any HTML encoding, which allows for reflected Cross-Site Scripting (XSS)."
+ },
+ "BenchmarkTest02113.java:targets.sast-rules.java.inject.java_inject_rule-SpotbugsPathTraversalAbsolute:52": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code directly concatenates user-controlled input from a request parameter into a file path without any validation or sanitization, allowing for arbitrary file access via path traversal."
+ },
+ "BenchmarkTest02114.java:targets.sast-rules.java.inject.java_inject_rule-LDAPInjection:62": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application constructs an LDAP filter string by concatenating untrusted user input ('bar') directly into the filter expression, which is then passed to the search method. Although the search method uses the filterArgs parameter, it only handles the '{0}' placeholder, leaving the concatenated 'bar' variable vulnerable to LDAP injection."
+ },
+ "BenchmarkTest02116.java:targets.sast-rules.java.inject.java_inject_rule-LDAPInjection:61": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application constructs an LDAP filter string by directly concatenating user-supplied input ('bar') without any sanitization or encoding, and executes it using the vulnerable three-argument 'search' method."
+ },
+ "BenchmarkTest02141.java:rules.java.sentinel_java_weak_random:48": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses java.util.Random to generate a 'rememberMe' cookie value, which is cryptographically insecure and predictable. For session-related tokens or authentication identifiers, java.security.SecureRandom must be used to prevent session hijacking."
+ },
+ "BenchmarkTest02143.java:targets.sast-rules.java.cookie.java_cookie_rule-HttpResponseSplitting:63": {
+  "verdict": "false_positive",
+  "confidence": 0.9,
+  "explanation": "The application uses the javax.servlet.http.Cookie class, which automatically validates cookie values to prevent CRLF injection, making this code safe against HTTP Response Splitting."
+ },
+ "BenchmarkTest02144.java:targets.sast-rules.java.cookie.java_cookie_rule-HttpResponseSplitting:63": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The application directly uses unsanitized user input from a request parameter to construct a Cookie object, which is then added to the HTTP response. This allows for HTTP Response Splitting if the underlying servlet container does not strictly enforce RFC 6265 validation."
+ },
+ "BenchmarkTest02148.java:targets.sast-rules.java.inject.java_inject_rule-CommandInjection:71": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application takes user-supplied input from a request parameter and concatenates it directly into a shell command string ('cmd + bar') which is then executed via Runtime.exec(). This allows an attacker to inject arbitrary shell commands."
+ },
+ "BenchmarkTest02151.java:targets.sast-rules.java.inject.java_inject_rule-CommandInjection:71": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application directly incorporates user-supplied input into an OS command execution via Runtime.exec, which is a classic command injection vulnerability."
+ },
+ "BenchmarkTest02166.java:rules.java.sentinel_java_trust_boundary:49": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The application takes untrusted input from a request parameter and stores it directly into the HTTP session without validation, which constitutes a trust boundary violation (CWE-501)."
+ },
+ "BenchmarkTest02168.java:rules.java.sentinel_java_trust_boundary:49": {
+  "verdict": "true_positive",
+  "confidence": 0.8,
+  "explanation": "The application takes untrusted user input directly from a request parameter and stores it in the HTTP session without validation, which can lead to session fixation or session poisoning vulnerabilities."
+ },
+ "BenchmarkTest02189.java:rules.java.sentinel_java_xpath_injection:65": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application constructs an XPath query by directly concatenating user-supplied input from the request parameter without validation or the use of variable resolvers, allowing for XPath injection."
+ },
+ "BenchmarkTest02189.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:72": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The application writes user-supplied input (retrieved from the XML document content) directly to the HTTP response without any HTML encoding, despite the content type being set to text/html. This allows for reflected XSS if the XML data source contains malicious scripts."
+ },
+ "BenchmarkTest02201.java:targets.sast-rules.java.inject.java_inject_rule-SpotbugsPathTraversalAbsolute:57": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code directly concatenates user-controlled input ('bar') into a file path used by FileInputStream without any validation or sanitization, allowing for arbitrary path traversal."
+ },
+ "BenchmarkTest02205.java:targets.sast-rules.java.inject.java_inject_rule-SpotbugsPathTraversalAbsolute:58": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code directly concatenates user-controlled input from the request parameter into a file path used by FileOutputStream without any validation or sanitization, allowing for arbitrary path traversal."
+ },
+ "BenchmarkTest02206.java:targets.sast-rules.java.inject.java_inject_rule-SpotbugsPathTraversalAbsolute:56": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application concatenates user-controlled input directly into a file path without validation or sanitization, allowing for path traversal attacks."
+ },
+ "BenchmarkTest02211.java:targets.sast-rules.java.crypto.java_crypto_rule-WeakMessageDigest:53": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application uses SHA-1, which is a cryptographically broken hash algorithm, to process and store sensitive data (passwords). This is insecure and violates modern security standards."
+ },
+ "BenchmarkTest02212.java:targets.sast-rules.java.crypto.java_crypto_rule-WeakMessageDigest:53": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses SHA-1, which is a cryptographically broken hash algorithm, to process sensitive data (passwords) for storage. This is a known security vulnerability as SHA-1 is susceptible to collision attacks."
+ },
+ "BenchmarkTest02236.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:53": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application retrieves user input from the request and writes it directly to the response without any sanitization or encoding, while explicitly setting the Content-Type to text/html."
+ },
+ "BenchmarkTest02239.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:53": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application retrieves user input from the request and writes it directly to the HTTP response without any sanitization or encoding, while explicitly setting the Content-Type to text/html, which creates a clear XSS vulnerability."
+ },
+ "BenchmarkTest02247.java:targets.sast-rules.java.cookie.java_cookie_rule-HttpResponseSplitting:67": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The application directly uses unsanitized user-supplied input from a request parameter to construct a Cookie object, which is then added to the HTTP response. This allows for potential HTTP Response Splitting if the underlying servlet container does not strictly enforce RFC 6265 validation."
+ },
+ "BenchmarkTest02248.java:targets.sast-rules.java.cookie.java_cookie_rule-HttpResponseSplitting:67": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The application takes user-supplied input from a request parameter and uses it directly to construct a Cookie object without any validation or sanitization, which can lead to HTTP response splitting if the underlying server does not enforce RFC 6265."
+ },
+ "BenchmarkTest02262.java:rules.java.sentinel_java_trust_boundary:53": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The application takes untrusted user input from request parameters and stores it directly into the HTTP session without validation or sanitization, which can lead to session fixation or session pollution vulnerabilities."
+ },
+ "BenchmarkTest02293.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherDESInsecure:73": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code explicitly uses the DES algorithm, which is cryptographically broken and considered insecure due to its short key length."
+ },
+ "BenchmarkTest02293.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherIntegrity:73": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses the DES algorithm with CBC mode, which is cryptographically broken and lacks built-in integrity protection. DES is considered insecure due to its short key length, and CBC mode without an HMAC is vulnerable to padding oracle attacks."
+ },
+ "BenchmarkTest02293.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherPaddingOracle:73": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses DES/CBC/PKCS5Padding, which is insecure due to the use of a weak cipher (DES) and a mode susceptible to padding oracle attacks (CBC with PKCS5Padding)."
+ },
+ "BenchmarkTest02294.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherDESInsecure:73": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code explicitly uses the DES algorithm, which is cryptographically broken and considered insecure due to its small key size."
+ },
+ "BenchmarkTest02294.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherIntegrity:73": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses DES, which is a broken and deprecated cryptographic algorithm with a small 56-bit key size, and uses CBC mode without an authenticated encryption mechanism, making it vulnerable to tampering."
+ },
+ "BenchmarkTest02294.java:targets.sast-rules.java.crypto.java_crypto_rule-CipherPaddingOracle:73": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses DES in CBC mode with PKCS5Padding, which is vulnerable to padding oracle attacks and uses an outdated, insecure block cipher (DES)."
+ },
+ "BenchmarkTest02299.java:targets.sast-rules.java.inject.java_inject_rule-LDAPInjection:72": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application constructs an LDAP filter string by directly concatenating untrusted user input ('bar') into the query string, which is then executed via 'ctx.search(base, filter, sc)'. This is a classic LDAP injection vulnerability as it does not use the parameterized search method that provides automatic encoding."
+ },
+ "BenchmarkTest02300.java:targets.sast-rules.java.inject.java_inject_rule-SpotbugsPathTraversalAbsolute:63": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The application uses user-controlled input (the parameter name) to construct a file path without sufficient validation, which allows for path traversal attacks."
+ },
+ "BenchmarkTest02304.java:targets.sast-rules.java.inject.java_inject_rule-SpotbugsPathTraversalAbsolute:67": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application directly concatenates user-controlled input (retrieved from request parameters) with a base directory path to construct a file path for FileInputStream, which allows for path traversal attacks."
+ },
+ "BenchmarkTest02305.java:targets.sast-rules.java.inject.java_inject_rule-LDAPInjection:76": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application constructs an LDAP filter string by concatenating user-controlled input ('bar') directly into the filter expression, which is then passed to the LDAP search method. While the search method is called with a 'filters' array, that array is hardcoded and does not include the user-controlled 'bar' variable, leaving the application vulnerable to LDAP injection."
+ },
+ "BenchmarkTest02306.java:targets.sast-rules.java.inject.java_inject_rule-LDAPInjection:75": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application constructs an LDAP filter string by concatenating untrusted user input ('bar') directly into the query, which is a classic LDAP injection vulnerability. The code uses the vulnerable three-argument 'search' method instead of the secure four-argument version that supports parameterized queries."
+ },
+ "BenchmarkTest02328.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:66": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application retrieves user-supplied input from the request parameters and writes it directly to the HTTP response without any sanitization or encoding, while explicitly disabling XSS protection headers."
+ },
+ "BenchmarkTest02332.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:63": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application takes user-controlled input from the request parameters and writes it directly to the response output stream without any sanitization or encoding, while explicitly setting the Content-Type to text/html."
+ },
+ "BenchmarkTest02336.java:targets.sast-rules.java.inject.java_inject_rule-CommandInjection:76": {
+  "verdict": "false_positive",
+  "confidence": 0.9,
+  "explanation": "The variable 'bar' used in the command is derived from a hardcoded string 'barbarians_at_the_gate' via a factory method, not from the user-controlled 'param' variable, making the command injection impossible."
+ },
+ "BenchmarkTest02339.java:targets.sast-rules.java.cookie.java_cookie_rule-CookieInsecure:77": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code explicitly sets the cookie's secure flag to false via cookie.setSecure(false), which allows the cookie to be transmitted over insecure HTTP connections."
+ },
+ "BenchmarkTest02339.java:targets.sast-rules.java.cookie.java_cookie_rule-HttpResponseSplitting:77": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The application takes user-controlled input from the request parameter name and directly uses it to construct a Cookie object without any validation or sanitization, which can lead to HTTP response splitting if the underlying servlet container does not strictly enforce RFC 6265."
+ },
+ "BenchmarkTest02352.java:rules.java.sentinel_java_trust_boundary:63": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The application takes user-controlled input from request parameters and uses it directly as a key in the HTTP session without validation, which can lead to session pollution or unauthorized data access."
+ },
+ "BenchmarkTest02376.java:targets.sast-rules.java.inject.java_inject_rule-LDAPInjection:61": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application constructs an LDAP filter string by concatenating untrusted user input ('bar') directly into the filter expression. Although the 'search' method is called with an array of arguments, the user-controlled variable 'bar' is placed outside the parameterized '{0}' placeholder, making it vulnerable to LDAP injection."
+ },
+ "BenchmarkTest02384.java:targets.sast-rules.java.inject.java_inject_rule-LDAPInjection:63": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application constructs an LDAP filter string by concatenating untrusted user input directly into the query, which is a classic LDAP injection vulnerability. It fails to use the parameterized search method that provides automatic encoding."
+ },
+ "BenchmarkTest02385.java:targets.sast-rules.java.crypto.java_crypto_rule-WeakMessageDigest:56": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code explicitly uses SHA-1, which is a cryptographically broken hash algorithm, to process and store sensitive data (password hashes)."
+ },
+ "BenchmarkTest02385.java:targets.sast-rules.java.crypto.java_crypto_rule-WeakMessageDigest:58": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code explicitly uses SHA-1, which is a cryptographically broken hash algorithm, to process sensitive data (implied by the filename 'passwordFile.txt'). SHA-1 is vulnerable to collision attacks and should be replaced with a modern, secure algorithm like SHA-256 or SHA-3."
+ },
+ "BenchmarkTest02410.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:54": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application retrieves user input via a request parameter and writes it directly to the HTTP response without any sanitization or encoding, while explicitly setting the Content-Type to text/html."
+ },
+ "BenchmarkTest02417.java:rules.java.sentinel_java_weak_random:50": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses java.util.Random to generate a 'rememberMe' token, which is cryptographically insecure and predictable. For session-related tokens or authentication identifiers, a cryptographically secure pseudo-random number generator (CSPRNG) like java.security.SecureRandom must be used."
+ },
+ "BenchmarkTest02427.java:targets.sast-rules.java.cookie.java_cookie_rule-CookieInsecure:65": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code explicitly sets the 'Secure' attribute to 'false' on line 67, which allows the cookie to be transmitted over unencrypted HTTP connections, violating security best practices."
+ },
+ "BenchmarkTest02432.java:targets.sast-rules.java.inject.java_inject_rule-CommandInjection:73": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application takes user-supplied input from a request parameter and passes it directly into an OS command execution function (Runtime.exec) without any sanitization or validation, leading to a clear command injection vulnerability."
+ },
+ "BenchmarkTest02457.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:67": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The application reflects user-supplied input ('bar', derived from request parameters) directly into the HTTP response body without any sanitization or encoding, which allows for reflected Cross-Site Scripting (XSS)."
+ },
+ "BenchmarkTest02466.java:targets.sast-rules.java.inject.java_inject_rule-SpotbugsPathTraversalAbsolute:55": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application concatenates user-controlled input directly into a file path without any validation or sanitization, allowing for arbitrary path traversal."
+ },
+ "BenchmarkTest02471.java:targets.sast-rules.java.inject.java_inject_rule-SpotbugsPathTraversalAbsolute:54": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application directly concatenates user-controlled input into a file path without any validation or sanitization, allowing for arbitrary path traversal."
+ },
+ "BenchmarkTest02472.java:targets.sast-rules.java.inject.java_inject_rule-LDAPInjection:64": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application constructs an LDAP filter string by concatenating untrusted user input ('bar') directly into the filter expression, which is then passed to the search method. Although the search method is called with a filter argument array, the user-controlled input is not part of that array and remains vulnerable to injection."
+ },
+ "BenchmarkTest02475.java:targets.sast-rules.java.crypto.java_crypto_rule-WeakMessageDigest:51": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code explicitly uses MD5, which is a cryptographically broken hash algorithm, to process and store sensitive data (passwords) in a file."
+ },
+ "BenchmarkTest02483.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:51": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application takes user-supplied input from a request parameter and writes it directly to the HTTP response without any encoding or validation, while explicitly setting the Content-Type to text/html."
+ },
+ "BenchmarkTest02484.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:51": {
+  "verdict": "false_positive",
+  "confidence": 0.9,
+  "explanation": "The code retrieves the parameter but then overwrites the variable 'bar' with a hardcoded string 'a_Value' from the map before writing it to the response, effectively neutralizing the user input."
+ },
+ "BenchmarkTest02507.java:targets.sast-rules.java.cookie.java_cookie_rule-CookieInsecure:65": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code explicitly sets the secure flag to false on line 67, which allows the cookie to be transmitted over unencrypted HTTP connections, violating security best practices."
+ },
+ "BenchmarkTest02507.java:targets.sast-rules.java.cookie.java_cookie_rule-HttpResponseSplitting:65": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The application takes user-supplied input from a request parameter and directly uses it to construct a javax.servlet.http.Cookie object without any validation or sanitization, which can lead to HTTP response splitting or header injection if the underlying servlet container does not strictly enforce RFC 6265."
+ },
+ "BenchmarkTest02508.java:targets.sast-rules.java.cookie.java_cookie_rule-HttpResponseSplitting:65": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The application takes user-supplied input from a request parameter and uses it directly to construct a Cookie object without any validation or sanitization, which can lead to HTTP response splitting or cookie injection vulnerabilities."
+ },
+ "BenchmarkTest02525.java:rules.java.sentinel_java_trust_boundary:51": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The application directly stores untrusted user input from an HTTP request parameter into the HTTP session without validation, which can lead to session fixation or session poisoning attacks."
+ },
+ "BenchmarkTest02527.java:rules.java.sentinel_java_trust_boundary:51": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The application uses untrusted user input directly as a key in the HTTP session, which can lead to session poisoning or denial-of-service by overwriting existing session attributes."
+ },
+ "BenchmarkTest02533.java:rules.java.sentinel_java_sqli:57": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code constructs an SQL query by concatenating untrusted user input directly into the query string, which is then executed via a PreparedStatement. Even though a PreparedStatement is used, the injection vulnerability exists because the user-controlled variable 'bar' is part of the SQL template itself."
+ },
+ "BenchmarkTest02543.java:rules.java.sentinel_java_sqli:55": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application directly concatenates untrusted user input from the request parameter into an SQL query string, which is a classic SQL injection vulnerability."
+ },
+ "BenchmarkTest02558.java:targets.sast-rules.java.inject.java_inject_rule-SpotbugsPathTraversalAbsolute:72": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application takes user-controlled input from the query string and uses it directly as a parent directory path in the java.io.File constructor, which allows for arbitrary path traversal."
+ },
+ "BenchmarkTest02569.java:targets.sast-rules.java.inject.java_inject_rule-SpotbugsPathTraversalAbsolute:78": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application directly concatenates unsanitized user-controlled input ('param') into a file path used in FileOutputStream, which allows for arbitrary path traversal and file overwrite vulnerabilities."
+ },
+ "BenchmarkTest02571.java:targets.sast-rules.java.inject.java_inject_rule-LDAPInjection:86": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code constructs an LDAP filter string using unsanitized user input ('bar') via string concatenation, which is then passed to the LDAP search method. While the method signature used supports parameterized arguments, the user input is concatenated directly into the filter string rather than being passed as a parameter, leaving the application vulnerable to LDAP injection."
+ },
+ "BenchmarkTest02572.java:targets.sast-rules.java.inject.java_inject_rule-LDAPInjection:85": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application constructs an LDAP filter string by directly concatenating untrusted user input ('bar') into the query string, which is then executed via 'idc.search'. This is a classic LDAP injection vulnerability as there is no sanitization or use of parameterized queries."
+ },
+ "BenchmarkTest02585.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:73": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application takes user-supplied input from the query string, performs minimal processing, and writes it directly to the response output without any HTML encoding. Additionally, the code explicitly disables XSS protection via the 'X-XSS-Protection' header, confirming the vulnerability."
+ },
+ "BenchmarkTest02596.java:targets.sast-rules.java.xss.java_xss_rule-XSSReqParamToServletWriter:73": {
+  "verdict": "false_positive",
+  "confidence": 0.9,
+  "explanation": "The user input is passed to ESAPI's encodeForHTML method before being written to the response, which effectively mitigates the XSS vulnerability in an HTML context."
+ },
+ "BenchmarkTest02623.java:rules.java.sentinel_java_trust_boundary:73": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The application takes untrusted user input from the query string and directly stores it in the HTTP session without validation, which can lead to session fixation or session poisoning attacks."
+ },
+ "BenchmarkTest02624.java:rules.java.sentinel_java_trust_boundary:73": {
+  "verdict": "true_positive",
+  "confidence": 0.9,
+  "explanation": "The application takes untrusted input directly from the query string and stores it in the HTTP session without validation, which constitutes a trust boundary violation (CWE-501)."
+ },
+ "BenchmarkTest02656.java:rules.java.sentinel_java_sqli:77": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application directly concatenates untrusted user input from the query string into an SQL statement, which is a classic SQL injection vulnerability."
+ },
+ "BenchmarkTest02657.java:rules.java.sentinel_java_sqli:77": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application constructs a SQL query by concatenating untrusted user input directly into the query string, which is a classic SQL injection vulnerability."
+ },
+ "BenchmarkTest02666.java:targets.sast-rules.java.inject.java_inject_rule-SpotbugsPathTraversalAbsolute:54": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application directly concatenates user-controlled input into a file path used by FileInputStream without any validation or sanitization, which is a classic path traversal vulnerability."
+ },
+ "BenchmarkTest02674.java:targets.sast-rules.java.crypto.java_crypto_rule-WeakMessageDigest:50": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code explicitly uses MD5, which is a cryptographically broken hash algorithm, to process and store sensitive data (implied by the variable name 'passwordFile.txt'). This is a clear violation of secure coding practices regarding password storage."
+ },
+ "BenchmarkTest02675.java:targets.sast-rules.java.crypto.java_crypto_rule-WeakMessageDigest:50": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses MD5, a cryptographically broken hash algorithm, to process sensitive data (implied by the filename 'passwordFile.txt'). MD5 is vulnerable to collision attacks and should not be used for security-sensitive operations."
+ },
+ "BenchmarkTest02699.java:targets.sast-rules.java.inject.java_inject_rule-CommandInjection:61": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The application takes user-controlled input from the request and concatenates it directly into a command string ('echo ' + bar) which is then executed via ProcessBuilder. This allows an attacker to inject arbitrary shell commands."
+ },
+ "BenchmarkTest02703.java:rules.java.sentinel_java_weak_random:49": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses java.util.Random to generate a 'rememberMe' cookie value, which is cryptographically insecure and predictable. For security-sensitive tokens, java.security.SecureRandom must be used instead."
+ },
+ "BenchmarkTest02707.java:rules.java.sentinel_java_weak_random:49": {
+  "verdict": "true_positive",
+  "confidence": 1.0,
+  "explanation": "The code uses java.util.Random to generate a 'rememberMe' token, which is a security-sensitive value. java.util.Random is cryptographically insecure and predictable, making it unsuitable for session or authentication tokens."
+ }
+}

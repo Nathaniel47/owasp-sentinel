@@ -21,6 +21,8 @@ services:
     profiles: ["scan"]
     volumes:
       - ./targets:/targets:ro
+      - ./rules:/rules:ro
+      - ./tests/fixtures:/fixtures:ro
       - ./results:/out
 
   # Fast path: copy sources into a Docker volume once (native Linux I/O is much
@@ -47,6 +49,7 @@ services:
     profiles: ["scan"]
     volumes:
       - scan-src:/work:ro
+      - ./rules:/rules:ro
       - ./results:/out
 
 volumes:

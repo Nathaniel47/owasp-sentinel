@@ -63,6 +63,12 @@ def write_csv(rows: list[Counts], path: Path) -> None:
 def main(argv: list[str] | None = None) -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("findings", type=Path)
+    ap.add_argument(
+        "--extra",
+        type=Path,
+        default=None,
+        help="findings from the custom rule pack; also scored merged with the base",
+    )
     ap.add_argument("--benchmark", type=Path, default=None)
     ap.add_argument("--out", type=Path, default=RESULTS)
     args = ap.parse_args(argv)
@@ -105,7 +111,31 @@ def main(argv: list[str] | None = None) -> None:
         + "\n",
         encoding="utf-8",
     )
+    extra_page: dict = {}
+    if args.extra:
+        extra = [
+            Finding.model_validate(d)
+            for d in json.loads(args.extra.read_text(encoding="utf-8"))
+        ]
+        merged = [*findings, *extra]
+        cfull = score(cases, merged)
+        csample = score(cases, merged, only_ids=sample_ids)
+        write_csv(cfull, args.out / "baseline_custom_full.csv")
+        write_csv(csample, args.out / "baseline_custom_sample.csv")
+        (args.out / "baseline_custom_full.md").write_text(
+            "# Opengrep + sast-rules + Sentinel custom rules, full OWASP Benchmark\n\n"
+            f"Adds `rules/java` ({len(extra)} findings) for SQL injection, trust "
+            "boundary, weak random and XPath injection. Same scoring as the "
+            f"baseline.\n\n{markdown_table(cfull)}\n\n## 450-case sample\n\n"
+            f"{markdown_table(csample)}\n",
+            encoding="utf-8",
+        )
+        extra_page = {
+            "custom_full": [_row(c) for c in cfull],
+            "custom_sample": [_row(c) for c in csample],
+        }
     page = {
+        **extra_page,
         "full": [_row(c) for c in full],
         "sample": [_row(c) for c in sample],
         "uncovered_categories": uncovered,
