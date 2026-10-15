@@ -28,3 +28,7 @@ targets/*
 .DS_Store
 Thumbs.db
 results/scan_*.json
+
+# Built by the demo image
+rules-merged/
+demo-cache/

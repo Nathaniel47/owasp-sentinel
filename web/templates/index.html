@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}OWASP Sentinel: scan code{% endblock %}
+{% block body %}
+<h1>Scan code for OWASP Top 10 issues</h1>
+<p>Static analysis (Opengrep + open rules) maps each finding to the OWASP Top 10 2025.
+An optional LLM second opinion marks likely false positives. Your code is only read,
+never run, and is not stored.</p>
+
+<h2>Try an example (one click, instant)</h2>
+<div class="row">
+{% for id, ex in examples.items() %}<a class="btn" href="/try/{{ id }}">{{ ex.title }}</a>{% endfor %}
+</div>
+
+{% if error %}<p class="err" role="alert">{{ error }}</p>{% endif %}
+{% if result %}
+<h2>{{ result.findings | length }} finding{{ '' if result.findings | length == 1 else 's' }}
+{% if example %}<span class="mute">(example: {{ examples[example].title }})</span>{% endif %}</h2>
+{% if result.triage_note %}<p class="mute">{{ result.triage_note }}</p>{% endif %}
+{% if not result.findings %}<p>No findings. That does not prove the code is safe: this scanner only knows the rules it was given.</p>{% endif %}
+{% for v in result.findings %}
+<div class="card">
+<div><strong>{{ v.finding.rule_id.split('.')[-1] }}</strong>
+<span class="mute">line {{ v.finding.start_line }}{% if v.finding.end_line != v.finding.start_line %}-{{ v.finding.end_line }}{% endif %}</span></div>
+<div>{% for o, name in v.owasp %}<span class="tag">{{ o }} {{ name }}</span>{% endfor %}{% for c in v.finding.cwes %}<span class="tag">CWE-{{ c }}</span>{% endfor %}</div>
+<p>{{ v.finding.message }}</p>
+<pre>{% for n, text, hit in v.excerpt %}<span {{ 'class=hit' if hit }}>{{ '%3d' % n }}  {{ text }}</span>{% endfor %}</pre>
+{% if v.verdict %}<p>AI triage:
+{% if v.verdict.verdict == 'false_positive' %}<strong class="fp">likely false positive</strong>
+{% elif v.verdict.verdict == 'true_positive' %}<strong class="tp">likely real</strong>{% else %}<strong>uncertain</strong>{% endif %}
+({{ '%.0f' % (v.verdict.confidence * 100) }}% confident). {{ v.verdict.explanation }}</p>{% endif %}
+</div>
+{% endfor %}
+{% endif %}
+
+<h2>Or paste your own</h2>
+<form method="post" action="/scan">
+<textarea name="code" spellcheck="false" maxlength="{{ limit }}" placeholder="Paste Java, JavaScript or Python (up to {{ limit }} bytes)">{{ code }}</textarea>
+<div class="row">
+<label>Language
+<select name="language">{% for k, label in labels.items() %}<option value="{{ k }}" {{ 'selected' if k == language }}>{{ label }}</option>{% endfor %}</select></label>
+{% if llm_enabled %}<label><input type="checkbox" name="use_llm" value="1" {{ 'checked' if use_llm }}> Add AI triage (shared free quota, first 8 findings)</label>{% endif %}
+<button class="primary" type="submit">Scan</button>
+<span class="mute">New code takes about 5-15 s to scan.</span>
+</div>
+</form>
+
+<h2>What this is, and is not</h2>
+<ul>
+<li>Benchmark numbers are on Java (OWASP Benchmark) and are
+<a href="/benchmark">labelled preliminary</a> until three triage runs finish.</li>
+<li>Java, JavaScript and Python only (the open JavaScript rule set has just 11 rules, so JS coverage is thin). No PHP rules; no analysis across files.</li>
+<li>LLM verdicts are advice, not proof. Do not paste secrets or code you may not share
+with a third-party AI API if you tick AI triage.</li>
+</ul>
+{% endblock %}

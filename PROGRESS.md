@@ -40,3 +40,12 @@ temperature between days: the cache key includes the model, so a change restarts
 
 Then: `pip install .[charts]`, `python -m sentinel.bench.charts`, delete
 `results/PRELIMINARY_triage_run1.md` (or replace it with the final write-up), tick Step 6.
+
+## Step 7 (Demo & deploy): built, not yet deployed
+
+Done and tested locally in Docker: web demo, precomputed examples, preliminary results
+page with an automatic PRELIMINARY banner, `DEPLOY.md`, `scripts/build_space.py`.
+**Left for you:** the Hugging Face login steps in `DEPLOY.md` (create Space, push,
+optional secrets). Use a different Gemini key from the Step 6 one, or leave it out,
+so the demo cannot use up Step 6's daily quota. After Step 6 finishes, redeploy so the
+demo shows the three-run numbers.

@@ -157,3 +157,14 @@ def test_gemini_parses_reply_and_from_env_default(monkeypatch) -> None:
     monkeypatch.setenv("LLM_API_KEY", "k")
     monkeypatch.delenv("LLM_MODEL", raising=False)
     assert from_env().name == f"gemini:{llm_client.DEFAULT_GEMINI_MODEL}"
+
+
+def test_owasp_2025_map_has_the_official_list_sizes() -> None:
+    """Per-category CWE counts on the official OWASP 2025 pages (249 in total)."""
+    from sentinel.core import owasp_map
+
+    official = dict(
+        A01=40, A02=16, A03=6, A04=32, A05=37, A06=39, A07=36, A08=14, A09=5, A10=24
+    )
+    got = {k: len(v) for k, v in owasp_map._data()["cwes"].items()}
+    assert got == official and sum(got.values()) == 249

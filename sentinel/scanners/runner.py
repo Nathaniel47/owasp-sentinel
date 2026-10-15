@@ -8,7 +8,7 @@ from __future__ import annotations
 import json
 import shutil
 import subprocess
-from collections.abc import Callable, Sequence
+from collections.abc import Callable, Mapping, Sequence
 from pathlib import Path
 
 from sentinel.core.models import Finding
@@ -21,12 +21,12 @@ class ScannerError(RuntimeError):
     """A scanner is missing, timed out, or produced unusable output."""
 
 
-def _run(cmd: list[str], timeout: int) -> str:
+def _run(cmd: list[str], timeout: int, env: Mapping[str, str] | None = None) -> str:
     if shutil.which(cmd[0]) is None:
         raise ScannerError(f"{cmd[0]} is not installed or not on PATH")
     try:
         proc = subprocess.run(
-            cmd, capture_output=True, text=True, timeout=timeout, check=False
+            cmd, capture_output=True, text=True, timeout=timeout, check=False, env=env
         )
     except subprocess.TimeoutExpired as exc:
         raise ScannerError(f"{cmd[0]} timed out after {timeout}s") from exc
@@ -57,13 +57,16 @@ def run_semgrep(
     config: str | list[str],
     binary: str = "opengrep",
     timeout: int = DEFAULT_TIMEOUT,
+    env: Mapping[str, str] | None = None,
 ) -> list[Finding]:
-    out = _run(semgrep_command(target, config, binary), timeout)
+    out = _run(semgrep_command(target, config, binary), timeout, env)
     return parse_sarif(json.loads(out), tool=binary)
 
 
-def run_bandit(target: Path, timeout: int = DEFAULT_TIMEOUT) -> list[Finding]:
-    out = _run(bandit_command(target), timeout)
+def run_bandit(
+    target: Path, timeout: int = DEFAULT_TIMEOUT, env: Mapping[str, str] | None = None
+) -> list[Finding]:
+    out = _run(bandit_command(target), timeout, env)
     return parse_sarif(json.loads(out), tool="bandit")
 
 
@@ -72,13 +75,18 @@ def scan(
     config: str | list[str],
     binary: str = "opengrep",
     timeout: int = DEFAULT_TIMEOUT,
+    env: Mapping[str, str] | None = None,
 ) -> list[Finding]:
-    """Scan a file or directory: Semgrep/Opengrep always, Bandit if Python exists."""
+    """Scan a file or directory: Semgrep/Opengrep always, Bandit if Python exists.
+
+    `env` replaces the scanner's environment (the demo points TMPDIR at a private
+    directory so the scanner's temp files are removed with it).
+    """
     target = Path(target)
     files = [target] if target.is_file() else list(target.rglob("*"))
-    findings = run_semgrep(target, config, binary, timeout)
+    findings = run_semgrep(target, config, binary, timeout, env)
     if any(language_of(str(f)) == "python" for f in files):
-        findings += run_bandit(target, timeout)
+        findings += run_bandit(target, timeout, env)
     return findings
 
 

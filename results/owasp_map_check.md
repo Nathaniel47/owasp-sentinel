@@ -2,8 +2,10 @@
 
 Date: 2026-10-15. Source: the "List of Mapped CWEs" section of each category page at
 <https://top10.owasp.org/2025/> (A01 to A10). Category names and IDs matched the
-draft exactly. The CWE lists were read through a summarising page fetch, not
-downloaded as raw HTML, so re-check any single CWE you plan to quote.
+draft exactly. The CWE lists were first read through a summarising page fetch.
+**Re-verified 2026-10-15 against the raw HTML** of all ten category pages: every
+"List of Mapped CWEs" section was parsed and compared with `owasp_2025.yaml`; all ten
+lists match exactly (no missing and no extra CWE).
 
 ## What the draft got wrong
 

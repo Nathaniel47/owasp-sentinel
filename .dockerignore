@@ -3,6 +3,12 @@
 .env
 __pycache__
 *.pyc
-targets
+targets/*
 .pytest_cache
 .ruff_cache
+!targets/fetch.py
+!targets/commits.json
+.llm_cache
+results/scan_*.json
+tests
+notebooks

@@ -3,7 +3,22 @@
 Hybrid LLM + SAST scanner for OWASP Top 10 (2025), benchmarked on known-vulnerable
 code (OWASP Benchmark for Java, Juice Shop for JavaScript). See [PLAN.md](PLAN.md).
 
-**Status:** Steps 2-5 done; Step 6 in progress (see PROGRESS.md; preliminary single-run triage results in results/PRELIMINARY_triage_run1.md). Baseline scored on the full Benchmark (`results/baseline_full.md`); LLM triage, verified auto-fix and the `/benchmark` page are built and unit-tested, but no real LLM run has been done yet, so there are no with-triage numbers. The GitHub App is out of scope per PLAN.md.
+**Status:** Steps 2-5 and 7 done; Step 6 (evaluation) is in progress (see PROGRESS.md).
+A public demo is built and ready to deploy (see [DEPLOY.md](DEPLOY.md)). All triage
+numbers are **preliminary**: a single LLM run, no variance yet
+(`results/PRELIMINARY_triage_run1.md`). The GitHub App is out of scope per PLAN.md.
+
+## Demo
+
+Scan pasted Java, JavaScript or Python (or click an example) and see OWASP Top 10 2025
+findings with optional LLM triage. Code is only read, never run.
+
+```powershell
+docker build --target demo -t sentinel-demo .
+docker run --rm -p 7860:7860 sentinel-demo   # http://localhost:7860
+```
+
+Live demo link: *not deployed yet* (needs your Hugging Face login, see DEPLOY.md).
 
 ## Quickstart (Windows, PowerShell)
 
