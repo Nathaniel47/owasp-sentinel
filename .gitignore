@@ -27,3 +27,4 @@ targets/*
 .vscode/
 .DS_Store
 Thumbs.db
+results/scan_*.json

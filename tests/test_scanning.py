@@ -55,8 +55,13 @@ def test_fixtures_exist_for_each_language() -> None:
 
 def test_commands_are_read_only_argv() -> None:
     cmd = runner.semgrep_command(Path("x"), "rules/")
-    assert cmd[:2] == ["semgrep", "scan"] and "--metrics=off" in cmd
+    assert cmd[:2] == ["opengrep", "scan"] and "--sarif" in cmd
     assert runner.bandit_command(Path("x"))[0] == "bandit"
+
+
+def test_multiple_configs_become_repeated_flags() -> None:
+    cmd = runner.semgrep_command(Path("x"), ["a/", "b/"])
+    assert cmd.count("--config") == 2 and cmd[-1] == "x"
 
 
 def test_missing_scanner_raises(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -74,10 +79,10 @@ def test_scan_runs_bandit_only_for_python(monkeypatch: pytest.MonkeyPatch) -> No
 
     monkeypatch.setattr(runner, "_run", fake_run)
     runner.scan(FIX / "java", "rules/")
-    assert calls == ["semgrep"]
+    assert calls == ["opengrep"]
     calls.clear()
     out = runner.scan(FIX / "python", "rules/")
-    assert calls == ["semgrep", "bandit"] and len(out) == 4
+    assert calls == ["opengrep", "bandit"] and len(out) == 4
 
 
 def test_run_reports_failure(monkeypatch: pytest.MonkeyPatch) -> None:

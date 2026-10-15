@@ -6,5 +6,9 @@
   "juice-shop": {
     "repo": "https://github.com/juice-shop/juice-shop.git",
     "commit": "e39a3bdb8c61295c31fa4e0a03485e68a8ca12a4"
+  },
+  "sast-rules": {
+    "repo": "https://gitlab.com/gitlab-org/security-products/sast-rules.git",
+    "commit": "53bf5cf6df3c51b6c02110f5a638b5e6213666cd"
   }
 }

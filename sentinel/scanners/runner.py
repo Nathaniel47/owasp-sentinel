@@ -35,18 +35,15 @@ def _run(cmd: list[str], timeout: int) -> str:
     return proc.stdout
 
 
-def semgrep_command(target: Path, config: str, binary: str = "semgrep") -> list[str]:
-    """Argv for a Semgrep or Opengrep SARIF scan with a pinned rule config."""
-    return [
-        binary,
-        "scan",
-        "--sarif",
-        "--quiet",
-        "--metrics=off",
-        "--config",
-        config,
-        str(target),
-    ]
+def semgrep_command(
+    target: Path, config: str | list[str], binary: str = "opengrep"
+) -> list[str]:
+    """Argv for a Semgrep or Opengrep SARIF scan with pinned rule config(s)."""
+    configs = [config] if isinstance(config, str) else config
+    cmd = [binary, "scan", "--sarif", "--quiet"]
+    for c in configs:
+        cmd += ["--config", c]
+    return [*cmd, str(target)]
 
 
 def bandit_command(target: Path) -> list[str]:
@@ -55,7 +52,10 @@ def bandit_command(target: Path) -> list[str]:
 
 
 def run_semgrep(
-    target: Path, config: str, binary: str = "semgrep", timeout: int = DEFAULT_TIMEOUT
+    target: Path,
+    config: str | list[str],
+    binary: str = "opengrep",
+    timeout: int = DEFAULT_TIMEOUT,
 ) -> list[Finding]:
     out = _run(semgrep_command(target, config, binary), timeout)
     return parse_sarif(json.loads(out), tool=binary)
@@ -67,7 +67,10 @@ def run_bandit(target: Path, timeout: int = DEFAULT_TIMEOUT) -> list[Finding]:
 
 
 def scan(
-    target: Path, config: str, binary: str = "semgrep", timeout: int = DEFAULT_TIMEOUT
+    target: Path,
+    config: str | list[str],
+    binary: str = "opengrep",
+    timeout: int = DEFAULT_TIMEOUT,
 ) -> list[Finding]:
     """Scan a file or directory: Semgrep/Opengrep always, Bandit if Python exists."""
     target = Path(target)

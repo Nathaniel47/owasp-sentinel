@@ -97,3 +97,13 @@ python -c "from pathlib import Path; from sentinel.scanners.runner import scan; 
   published lists before quoting any per-category number.
 - The rule set (`config`) is a parameter: the Registry vs Opengrep decision in the
   README is still open.
+
+## Step 4 addendum: real scans through Docker
+- Rules switched to Opengrep + MIT-licensed GitLab sast-rules (see README for why
+  the Semgrep Registry and `opengrep-rules` were rejected).
+- Semgrep/Opengrep do not run natively on Windows, so the scanner is a Docker stage:
+  `docker compose --profile scan run --rm scanner <target> --config <rules>`.
+- First real results are in `results/scan_smoke.md`: 32 findings on Juice Shop and 65
+  on 100 Benchmark files. These are counts only; scoring against the answer key is
+  the next piece of work.
+- Windows tip: in Git Bash set `MSYS_NO_PATHCONV=1` or `/targets/...` paths get rewritten.
