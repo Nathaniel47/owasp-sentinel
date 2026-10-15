@@ -3,7 +3,7 @@
 Hybrid LLM + SAST scanner for OWASP Top 10 (2025), benchmarked on known-vulnerable
 code (OWASP Benchmark for Java, Juice Shop for JavaScript). See [PLAN.md](PLAN.md).
 
-**Status:** Steps 2-5 done. Baseline scored on the full Benchmark (`results/baseline_full.md`); LLM triage, verified auto-fix and the `/benchmark` page are built and unit-tested, but no real LLM run has been done yet, so there are no with-triage numbers. The GitHub App is out of scope per PLAN.md.
+**Status:** Steps 2-5 done; Step 6 in progress (see PROGRESS.md; preliminary single-run triage results in results/PRELIMINARY_triage_run1.md). Baseline scored on the full Benchmark (`results/baseline_full.md`); LLM triage, verified auto-fix and the `/benchmark` page are built and unit-tested, but no real LLM run has been done yet, so there are no with-triage numbers. The GitHub App is out of scope per PLAN.md.
 
 ## Quickstart (Windows, PowerShell)
 

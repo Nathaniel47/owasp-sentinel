@@ -1,0 +1,154 @@
+# License: MIT (c) 2026 Nathaniel Ankomah Aidoo. See ../LICENSE.
+# Sentinel custom rules for the OWASP Benchmark categories the pinned GitLab
+# sast-rules pack does not cover (SQL injection, trust boundary, weak random,
+# XPath injection). Written from the Java servlet / JDBC / XPath APIs, not from
+# the Benchmark's answer key.
+rules:
+  - id: sentinel_java_sqli
+    languages: [java]
+    severity: ERROR
+    mode: taint
+    message: "Untrusted request data reaches an SQL statement string. Use a PreparedStatement with bound parameters."
+    metadata:
+      cwe: ["CWE-89"]
+      license: MIT
+    pattern-sources:
+      - pattern: "$REQ.getParameter(...)"
+      - pattern: "$REQ.getParameterValues(...)"
+      - pattern: "$REQ.getParameterMap(...)"
+      - pattern: "$REQ.getParameterNames(...)"
+      - pattern: "$REQ.getHeader(...)"
+      - pattern: "$REQ.getHeaders(...)"
+      - pattern: "$REQ.getHeaderNames(...)"
+      - pattern: "$REQ.getCookies(...)"
+      - pattern: "$REQ.getQueryString(...)"
+      - pattern: "$REQ.getRequestURI(...)"
+      - pattern: "$REQ.getRequestURL(...)"
+      - pattern: "$REQ.getInputStream(...)"
+    pattern-sinks:
+      - patterns:
+          - pattern: "(java.sql.Statement $S).execute($Q, ...)"
+          - focus-metavariable: "$Q"
+      - patterns:
+          - pattern: "(java.sql.Statement $S).executeQuery($Q, ...)"
+          - focus-metavariable: "$Q"
+      - patterns:
+          - pattern: "(java.sql.Statement $S).executeUpdate($Q, ...)"
+          - focus-metavariable: "$Q"
+      - patterns:
+          - pattern: "(java.sql.Statement $S).executeLargeUpdate($Q, ...)"
+          - focus-metavariable: "$Q"
+      - patterns:
+          - pattern: "(java.sql.Statement $S).addBatch($Q, ...)"
+          - focus-metavariable: "$Q"
+      - patterns:
+          - pattern: "(java.sql.Connection $C).prepareStatement($Q, ...)"
+          - focus-metavariable: "$Q"
+      - patterns:
+          - pattern: "(java.sql.Connection $C).prepareCall($Q, ...)"
+          - focus-metavariable: "$Q"
+      - patterns:
+          - pattern: "(java.sql.Connection $C).nativeSQL($Q, ...)"
+          - focus-metavariable: "$Q"
+      - patterns:
+          - pattern: "(org.springframework.jdbc.core.JdbcTemplate $JT).query($Q, ...)"
+          - focus-metavariable: "$Q"
+      - patterns:
+          - pattern: "(org.springframework.jdbc.core.JdbcTemplate $JT).queryForObject($Q, ...)"
+          - focus-metavariable: "$Q"
+      - patterns:
+          - pattern: "(org.springframework.jdbc.core.JdbcTemplate $JT).queryForList($Q, ...)"
+          - focus-metavariable: "$Q"
+      - patterns:
+          - pattern: "(org.springframework.jdbc.core.JdbcTemplate $JT).queryForMap($Q, ...)"
+          - focus-metavariable: "$Q"
+      - patterns:
+          - pattern: "(org.springframework.jdbc.core.JdbcTemplate $JT).update($Q, ...)"
+          - focus-metavariable: "$Q"
+      - patterns:
+          - pattern: "(org.springframework.jdbc.core.JdbcTemplate $JT).execute($Q, ...)"
+          - focus-metavariable: "$Q"
+      - patterns:
+          - pattern: "(org.springframework.jdbc.core.JdbcTemplate $JT).batchUpdate($Q, ...)"
+          - focus-metavariable: "$Q"
+
+  - id: sentinel_java_trust_boundary
+    languages: [java]
+    severity: ERROR
+    mode: taint
+    message: "Untrusted request data is used as a key or value in the HTTP session, crossing a trust boundary without validation."
+    metadata:
+      cwe: ["CWE-501"]
+      license: MIT
+    pattern-sources:
+      - pattern: "$REQ.getParameter(...)"
+      - pattern: "$REQ.getParameterValues(...)"
+      - pattern: "$REQ.getParameterMap(...)"
+      - pattern: "$REQ.getParameterNames(...)"
+      - pattern: "$REQ.getHeader(...)"
+      - pattern: "$REQ.getHeaders(...)"
+      - pattern: "$REQ.getHeaderNames(...)"
+      - pattern: "$REQ.getCookies(...)"
+      - pattern: "$REQ.getQueryString(...)"
+      - pattern: "$REQ.getRequestURI(...)"
+      - pattern: "$REQ.getRequestURL(...)"
+      - pattern: "$REQ.getInputStream(...)"
+    pattern-sinks:
+      - patterns:
+          - pattern: "$SESS.setAttribute($K, $V)"
+          - focus-metavariable: "$K"
+      - patterns:
+          - pattern: "$SESS.setAttribute($K, $V)"
+          - focus-metavariable: "$V"
+      - patterns:
+          - pattern: "$SESS.putValue($K, $V)"
+          - focus-metavariable: "$K"
+      - patterns:
+          - pattern: "$SESS.putValue($K, $V)"
+          - focus-metavariable: "$V"
+
+  - id: sentinel_java_weak_random
+    languages: [java]
+    severity: WARNING
+    message: "java.util.Random and Math.random() are predictable. Use java.security.SecureRandom for security-relevant values."
+    metadata:
+      cwe: ["CWE-330"]
+      license: MIT
+    pattern-either:
+      - pattern: new java.util.Random(...).$M(...)
+      - pattern: (java.util.Random $R).$M(...)
+      - pattern: Math.random()
+      - pattern: java.lang.Math.random()
+      - pattern: java.util.concurrent.ThreadLocalRandom.current().$M(...)
+
+  - id: sentinel_java_xpath_injection
+    languages: [java]
+    severity: ERROR
+    mode: taint
+    message: "Untrusted request data reaches an XPath expression. Use an XPath variable resolver or validate the input."
+    metadata:
+      cwe: ["CWE-643"]
+      license: MIT
+    pattern-sources:
+      - pattern: "$REQ.getParameter(...)"
+      - pattern: "$REQ.getParameterValues(...)"
+      - pattern: "$REQ.getParameterMap(...)"
+      - pattern: "$REQ.getParameterNames(...)"
+      - pattern: "$REQ.getHeader(...)"
+      - pattern: "$REQ.getHeaders(...)"
+      - pattern: "$REQ.getHeaderNames(...)"
+      - pattern: "$REQ.getCookies(...)"
+      - pattern: "$REQ.getQueryString(...)"
+      - pattern: "$REQ.getRequestURI(...)"
+      - pattern: "$REQ.getRequestURL(...)"
+      - pattern: "$REQ.getInputStream(...)"
+    pattern-sinks:
+      - patterns:
+          - pattern: "(javax.xml.xpath.XPath $XP).evaluate($E, ...)"
+          - focus-metavariable: "$E"
+      - patterns:
+          - pattern: "(javax.xml.xpath.XPath $XP).compile($E)"
+          - focus-metavariable: "$E"
+      - patterns:
+          - pattern: "(javax.xml.xpath.XPath $XP).evaluateExpression($E, ...)"
+          - focus-metavariable: "$E"

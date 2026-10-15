@@ -62,8 +62,10 @@ def parse_verdict(text: str) -> Verdict:
         )
 
 
-def triage(finding: Finding, root: Path, client: LLMClient) -> Verdict:
-    prompt = build_prompt(finding, code_context(finding, root))
+def triage(
+    finding: Finding, root: Path, client: LLMClient, lines: int = CONTEXT_LINES
+) -> Verdict:
+    prompt = build_prompt(finding, code_context(finding, root, lines))
     return parse_verdict(client.complete(SYSTEM, prompt))
 
 

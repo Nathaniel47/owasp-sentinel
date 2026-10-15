@@ -180,3 +180,23 @@ for the same reason.
   5-minute default timeout once). The fast path copies sources into a Docker volume
   (native Linux disk) and scans in batches with progress: ~5 min, identical findings
   (1,579) and identical scores.
+
+## Step 6 (in progress): custom rules, Gemini triage, preliminary results
+- The GitLab rule pack has no Java rules for SQL injection, trust boundary, weak random
+  or XPath injection. `rules/java/sentinel-java.yml` (MIT) adds taint rules for the first,
+  second and fourth and a pattern rule for weak random. Overall recall on the 450 sample
+  went 0.600 -> 0.889.
+- **Custom rules raised the false-positive rate (0.289 -> 0.427) while precision stayed
+  at 0.676.** The new rules are broad: they flag any request data reaching a SQL string,
+  session call or XPath call, and any `java.util.Random`, even where the Benchmark's
+  "fake" cases neutralise the value or use `SecureRandom` through a `Random`-typed
+  variable. **To tune later:** add sanitiser patterns, handle collections and ternaries
+  in taint flow, and exclude `Random` variables assigned from `SecureRandom`. The LLM
+  triage step exists partly to absorb this noise, but it should not be the only fix.
+- Triage with Gemini is a **single run so far**: FPR 0.427 -> 0.360 with recall
+  unchanged. Treat it as preliminary until runs 2 and 3 give a spread
+  (`results/PRELIMINARY_triage_run1.md`, `PROGRESS.md`).
+- Free-tier LLM APIs have per-day request caps (500/day here), so an experiment of
+  ~1,160 calls needs planning. The cache makes runs resumable and re-scoring free.
+- Secrets: `scripts/check_secrets.py` is a pre-commit hook that blocks API-key-shaped
+  strings and `.env` files; `.env.example` must keep empty values.
