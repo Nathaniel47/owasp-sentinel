@@ -1,0 +1,78 @@
+"""Run Semgrep/Opengrep and Bandit as subprocesses and normalise their SARIF.
+
+Scanners only read code; nothing scanned is ever executed.
+"""
+
+from __future__ import annotations
+
+import json
+import shutil
+import subprocess
+from pathlib import Path
+
+from sentinel.core.models import Finding
+from sentinel.core.sarif import language_of, parse_sarif
+
+DEFAULT_TIMEOUT = 300
+
+
+class ScannerError(RuntimeError):
+    """A scanner is missing, timed out, or produced unusable output."""
+
+
+def _run(cmd: list[str], timeout: int) -> str:
+    if shutil.which(cmd[0]) is None:
+        raise ScannerError(f"{cmd[0]} is not installed or not on PATH")
+    try:
+        proc = subprocess.run(
+            cmd, capture_output=True, text=True, timeout=timeout, check=False
+        )
+    except subprocess.TimeoutExpired as exc:
+        raise ScannerError(f"{cmd[0]} timed out after {timeout}s") from exc
+    # Semgrep/Bandit exit 1 when findings exist; 2+ means a real failure.
+    if proc.returncode > 1 or not proc.stdout.strip():
+        raise ScannerError(f"{cmd[0]} failed ({proc.returncode}): {proc.stderr[:300]}")
+    return proc.stdout
+
+
+def semgrep_command(target: Path, config: str, binary: str = "semgrep") -> list[str]:
+    """Argv for a Semgrep or Opengrep SARIF scan with a pinned rule config."""
+    return [
+        binary,
+        "scan",
+        "--sarif",
+        "--quiet",
+        "--metrics=off",
+        "--config",
+        config,
+        str(target),
+    ]
+
+
+def bandit_command(target: Path) -> list[str]:
+    """Argv for a recursive Bandit scan with SARIF output."""
+    return ["bandit", "-r", str(target), "-f", "sarif", "-q"]
+
+
+def run_semgrep(
+    target: Path, config: str, binary: str = "semgrep", timeout: int = DEFAULT_TIMEOUT
+) -> list[Finding]:
+    out = _run(semgrep_command(target, config, binary), timeout)
+    return parse_sarif(json.loads(out), tool=binary)
+
+
+def run_bandit(target: Path, timeout: int = DEFAULT_TIMEOUT) -> list[Finding]:
+    out = _run(bandit_command(target), timeout)
+    return parse_sarif(json.loads(out), tool="bandit")
+
+
+def scan(
+    target: Path, config: str, binary: str = "semgrep", timeout: int = DEFAULT_TIMEOUT
+) -> list[Finding]:
+    """Scan a file or directory: Semgrep/Opengrep always, Bandit if Python exists."""
+    target = Path(target)
+    files = [target] if target.is_file() else list(target.rglob("*"))
+    findings = run_semgrep(target, config, binary, timeout)
+    if any(language_of(str(f)) == "python" for f in files):
+        findings += run_bandit(target, timeout)
+    return findings
