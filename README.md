@@ -48,8 +48,39 @@ pytest tests/test_bench_data.py
 
 ## Rules licence decision
 
-_TBD (week 1):_ Semgrep Registry rules vs Opengrep + community rules. Record the
-choice and the reasoning here after reading the Semgrep Rules License.
+**Decision: Opengrep engine + openly licensed rules only.** Rules are fetched at a
+pinned commit into `targets/` (see `targets/commits.json`) and never copied into
+this repo.
+
+| Component | Source | Licence |
+|---|---|---|
+| Engine | [Opengrep](https://github.com/opengrep/opengrep) v1.31.0 (release binary, sha256-pinned in the Dockerfile) | LGPL-2.1 |
+| Rules (Java, JS, Python) | GitLab [sast-rules](https://gitlab.com/gitlab-org/security-products/sast-rules) @ `53bf5cf6df` | MIT (repo LICENSE; `doc/` is CC BY-SA 4.0 and is not used) |
+| Python scanner | [Bandit](https://github.com/PyCQA/bandit) | Apache-2.0 |
+
+Rejected:
+- **Semgrep Registry rules**: Semgrep Rules License restricts use in hosted services,
+  and PLAN.md ships a public demo.
+- **`opengrep/opengrep-rules`**: a mirror of semgrep-rules under LGPL-2.1 *plus the
+  Commons Clause*, which forbids selling a service whose value comes from the
+  software. That is not open-source, so it is excluded.
+
+Licences were read from each repo's LICENSE file on 2026-10-15. This is not legal
+advice. GitLab's rule set has no PHP rules, so PHP stays out of scope (PLAN.md
+already makes it optional).
+
+## Running scans (Docker, works on Windows)
+
+No native Semgrep/Opengrep install is needed. Fetch targets and rules, then:
+
+```powershell
+python targets/fetch.py
+docker compose --profile scan run --rm scanner /targets/juice-shop `
+  --config /targets/sast-rules/javascript --config /targets/sast-rules/java `
+  --out /out/scan_juice_shop.json
+```
+
+The scanner container mounts `targets/` read-only and only reads the code.
 
 ## Development
 
