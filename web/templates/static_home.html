@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block title %}OWASP Sentinel{% endblock %}
+{% from "_summary.html" import explain, chart %}
 {% block body %}
 <h1>OWASP Sentinel</h1>
 <p>A hybrid scanner for the OWASP Top 10 (2025): static analysis (Opengrep with open
@@ -13,10 +14,23 @@ there is no run-to-run spread yet. Differences of a few points may be noise.</di
 scanner (paste code, get findings) is not hosted here. It runs locally with Docker:
 see the <a href="{{ readme_url }}">README</a> for the two commands.</div>
 
+<h2>What I built</h2>
+<ul>
+<li><strong>Custom rules:</strong> a Java rule pack for SQL injection, trust boundary,
+weak randomness and XPath injection, the categories the open rules miss.</li>
+<li><strong>LLM triage pipeline:</strong> each finding and its code context goes to an LLM
+for a true/false-positive verdict. Only confident false positives are dropped, every call
+is cached, and fixes are checked by re-scanning.</li>
+<li><strong>Reproducible benchmark:</strong> pinned OWASP Benchmark commit, fixed-seed
+450-case sample, scored against the official answers; categories without ground truth
+are marked "Not covered".</li>
+</ul>
 <h2>Headline numbers (450-case Benchmark sample, Java)</h2>
+{{ explain() }}
 <div class="scroll"><table><tr><th class="l">Configuration</th><th>Precision</th><th>Recall</th><th>False-positive rate</th></tr>
 {% for n in t.names %}<tr><td class="l">{{ n }}</td>
 {% for m in ['precision','recall','fpr'] %}<td>{{ '%.3f' % t.configs[n].overall[m].mean }}</td>{% endfor %}</tr>{% endfor %}</table></div>
+{{ chart(t) }}
 <ul>
 <li>Custom rules (B) raise recall but also the false-positive rate; they are broad and untuned.</li>
 <li>LLM triage (C) removed 19 of 388 findings in the single run, lowering the false-positive rate without losing recall.</li>

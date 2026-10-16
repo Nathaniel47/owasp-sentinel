@@ -1,0 +1,20 @@
+{% macro explain() %}
+<p><strong>In plain English:</strong> <em>precision</em> is how many flagged issues are real;
+<em>recall</em> is how many real issues get found; <em>false-positive rate</em> is how many
+safe code samples are wrongly flagged. Higher precision and recall are better; lower
+false-positive rate is better.</p>
+{% endmacro %}
+{% macro chart(t) %}
+{% set ms = [('precision','Precision (higher is better)'),('recall','Recall (higher is better)'),('fpr','False-positive rate (lower is better)')] %}
+<svg class="chart" viewBox="0 0 640 250" role="img" aria-label="Bar chart of precision, recall and false-positive rate for configurations A, B and C">
+<line class="ax" x1="40" y1="200" x2="630" y2="200"/>
+{% for v in [0, 0.5, 1] %}<text x="34" y="{{ 204 - v*170 }}" text-anchor="end">{{ v }}</text>{% if v %}<line class="ax" x1="40" y1="{{ 200 - v*170 }}" x2="630" y2="{{ 200 - v*170 }}" stroke-dasharray="3 4"/>{% endif %}{% endfor %}
+{% for m, label in ms %}{% set gx = 55 + loop.index0 * 195 %}
+{% for n in t.names %}{% set v = t.configs[n].overall[m].mean %}{% set h = v * 170 %}
+<rect class="c{{ loop.index0 }}" x="{{ gx + loop.index0 * 50 }}" y="{{ 200 - h }}" width="42" height="{{ h }}"><title>{{ n }}: {{ '%.3f' % v }}</title></rect>
+<text x="{{ gx + loop.index0 * 50 + 21 }}" y="{{ 194 - h }}" text-anchor="middle">{{ '%.2f' % v }}</text>
+<text x="{{ gx + loop.index0 * 50 + 21 }}" y="215" text-anchor="middle">{{ 'ABC'[loop.index0] }}</text>{% endfor %}
+<text x="{{ gx + 71 }}" y="238" text-anchor="middle">{{ label }}</text>{% endfor %}
+</svg>
+<p class="mute">{% for n in t.names %}<span class="sw c{{ loop.index0 }}"></span>{{ n }}{% endfor %}</p>
+{% endmacro %}

@@ -20,8 +20,16 @@ button,select,.btn{font:inherit;padding:.4rem .8rem;border-radius:6px;border:1px
 button.primary{background:var(--accent);color:var(--bg);border-color:var(--accent)}
 .row{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin:.5rem 0}
 .tag{font-size:12px;border:1px solid var(--line);border-radius:10px;padding:0 .5rem;margin-right:.25rem;color:var(--mute)}
+.chart{width:100%;height:auto;margin:.5rem 0}.chart text{fill:var(--fg);font:12px system-ui,sans-serif}.chart .ax{stroke:var(--line)}
+.sw{display:inline-block;width:.8rem;height:.8rem;border-radius:2px;margin:0 .3rem 0 .8rem;vertical-align:-1px}
+.c0{fill:#8a8a8a;background:#8a8a8a}.c1{fill:#2f7fc1;background:#2f7fc1}.c2{fill:#d9822b;background:#d9822b}
+footer{margin-top:2.5rem;padding-top:1rem;border-top:1px solid var(--line);color:var(--mute);font-size:14px}
 .fp{color:var(--ok)}.tp{color:var(--bad)}.err{color:var(--bad);font-weight:600}.mute{color:var(--mute)}
 </style></head><body>
 <nav><b>OWASP Sentinel</b><a href="{{ home_url|default('/') }}">{{ home_label|default('Scan code') }}</a><a href="{{ bench_url|default('/benchmark') }}">Benchmark results</a></nav>
 {% block body %}{% endblock %}
+<footer>Built by <strong>Nathaniel Ankomah Aidoo</strong> &middot;
+<a href="https://github.com/Nathaniel47/owasp-sentinel">GitHub repo</a> &middot;
+<a href="https://nathanielaidoo.me">Portfolio</a> &middot;
+<a href="https://www.linkedin.com/in/nathaniel-ankomah-aidoo">LinkedIn</a></footer>
 </body></html>

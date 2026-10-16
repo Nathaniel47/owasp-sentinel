@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block title %}OWASP Sentinel: benchmark results{% endblock %}
+{% from "_summary.html" import explain, chart %}
 {% block body %}
 {% if t %}
 <h1>LLM triage on the OWASP Benchmark sample</h1>
@@ -12,9 +13,11 @@ remaining runs finish.</div>
 <p>Model <code>{{ t.model }}</code>, temperature {{ t.temperature }}. {{ t.sample_cases }}
 Benchmark cases (stratified sample, Java), {{ t.findings_triaged_per_run }} findings
 triaged per run. Only confident false positives are dropped.</p>
+{{ explain() }}
 <div class="scroll"><table><tr><th class="l">Configuration</th><th>Precision</th><th>Recall</th><th>FPR</th><th>Youden</th></tr>
 {% for n in t.names %}<tr><td class="l">{{ n }}</td>
 {% for m in ['precision','recall','fpr','youden'] %}{% set s = t.configs[n].overall[m] %}<td>{{ 'n/a' if s.mean is none else '%.3f' % s.mean }}{{ ' ± %.3f' % s.sd if s.sd else '' }}</td>{% endfor %}</tr>{% endfor %}</table></div>
+{{ chart(t) }}
 <h2>Per Benchmark category (precision / recall / FPR)</h2>
 <p class="mute">The OWASP column comes from <code>owasp_2025.yaml</code>, checked against the
 official OWASP Top 10 2025 CWE lists. Each cell rests on about 20 real and 20 fake cases.</p>

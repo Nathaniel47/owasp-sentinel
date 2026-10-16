@@ -735,7 +735,7 @@
     }
    }
   },
-  "C. B + LLM triage (1 runs)": {
+  "C. B + LLM triage (1 run)": {
    "cmdi": {
     "precision": {
      "mean": 0.6176470588235294,

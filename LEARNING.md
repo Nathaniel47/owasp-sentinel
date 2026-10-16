@@ -262,3 +262,27 @@ execution, no key) at the cost of no live scanning, which stays available locall
 Docker. Free-tier terms change, so check them before planning a deployment. The static
 page reads the same data as the app, so the PRELIMINARY banner disappears when the
 final three-run numbers are rendered and re-uploaded.
+
+## Step 8: README and write-up
+
+**What I made.** A polished README (purpose, architecture diagram, results table,
+limitations, future work), a 120-word portfolio card (`PORTFOLIO.md`) and a short
+technical write-up (`docs/WRITEUP.md`). The demo pages now carry a "Built by" footer, a
+plain-English definition of precision/recall/false-positive rate, a bar chart of
+configurations A/B/C, and a "What I built" section.
+
+**Why it matters.** A reviewer will read the README and write-up before any code. They
+need to see the question, the method, honest numbers and the limits. Preliminary results
+are labelled and the final three-run cells say `TBD`, so nothing is overstated.
+
+**One-line research connection (for emails to professors).** "OWASP Sentinel is a small,
+reproducible study of whether LLM triage can reduce false positives in static analysis
+on a ground-truth benchmark, which connects directly to work on LLMs for vulnerability
+detection, AI-assisted security testing and the correctness of LLM-generated code
+fixes."
+
+**Small fix.** The table label said "(1 runs)"; it now says "(1 run)" and "(3 runs)".
+
+**To finish later.** After triage runs 2 and 3: re-run `--eval-only`, rebuild the static
+pages, re-upload, then replace the `TBD` cells in README.md, docs/WRITEUP.md and the
+numbers in PORTFOLIO.md.
