@@ -259,3 +259,25 @@ def test_benchmark_page_labels_preliminary(
 
 def benchmark_metrics() -> tuple[str, ...]:
     return ("precision", "recall", "fpr", "youden")
+
+
+def test_static_build_is_labelled_preliminary_and_self_contained(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location(
+        "build_static", ROOT / "scripts" / "build_static.py"
+    )
+    assert spec and spec.loader
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    monkeypatch.setattr(mod, "OUT", tmp_path / "static")
+    mod.main()
+    home = (tmp_path / "static" / "index.html").read_text(encoding="utf-8")
+    page = (tmp_path / "static" / "benchmark.html").read_text(encoding="utf-8")
+    assert "PRELIMINARY" in home and "PRELIMINARY" in page
+    assert "locally with Docker" in home and "github.com" in home
+    assert "<script" not in home + page and "<form" not in home
+    card = (tmp_path / "static" / "README.md").read_text(encoding="utf-8")
+    assert "sdk: static" in card
