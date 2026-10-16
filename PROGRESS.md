@@ -48,3 +48,12 @@ benchmark pages, PRELIMINARY banner). Hugging Face free tier refused a Docker Sp
 (402), so the live scanner is local-only via Docker; the image is built and tested.
 After Step 6 finishes: re-run `run_triage --eval-only`, `scripts/build_static.py`, and
 re-upload (commands in DEPLOY.md) so the page shows the three-run numbers.
+
+## Step 8 (README & write-up): drafted, final numbers pending
+
+Written: README.md, PORTFOLIO.md, docs/WRITEUP.md, LEARNING.md entry. Step 8 stays
+unticked until these placeholders are replaced with the 3-run numbers:
+- README.md: results table row "C ... final (3 runs, mean ± sd)" (TBD), PRELIMINARY note
+- docs/WRITEUP.md: status line, results table row (TBD), run-1 wording in section 3
+- PORTFOLIO.md: the 0.43 -> 0.36 FPR claim and "preliminary" wording
+- README.md demo GIF placeholder

@@ -263,10 +263,11 @@ def main(argv: list[str] | None = None) -> int:
         stats["uncertain"].append(
             sum(v.verdict == "uncertain" for v in verdicts.values())
         )
+    n_runs = f"{len(done)} run" + ("" if len(done) == 1 else "s")
     configs = {
         "A. Opengrep (sast-rules)": static_summary(score(cases, f_base, only_ids=ids)),
         "B. A + custom rules": static_summary(score(cases, f_all, only_ids=ids)),
-        f"C. B + LLM triage ({len(done)} runs)": summarise(per_run),
+        f"C. B + LLM triage ({n_runs})": summarise(per_run),
     }
     report = {
         "model": model,

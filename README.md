@@ -1,27 +1,85 @@
 # OWASP Sentinel
 
-Hybrid LLM + SAST scanner for OWASP Top 10 (2025), benchmarked on known-vulnerable
-code (OWASP Benchmark for Java, Juice Shop for JavaScript). See [PLAN.md](PLAN.md).
+**A hybrid scanner that finds OWASP Top 10 (2025) vulnerabilities with static analysis, then asks an LLM to cut the false positives, benchmarked against known answers.**
 
-**Status:** Steps 2-5 and 7 done; Step 6 (evaluation) is in progress (see PROGRESS.md).
-A static public demo is live (see [DEPLOY.md](DEPLOY.md)). All triage
-numbers are **preliminary**: a single LLM run, no variance yet
-(`results/PRELIMINARY_triage_run1.md`). The GitHub App is out of scope per PLAN.md.
+[Live demo (static)](https://ankomahaidoo-owasp-sentinel.static.hf.space/) ·
+[Write-up](docs/WRITEUP.md) · [Plan](PLAN.md) ·
+Built by Nathaniel Ankomah Aidoo ([portfolio](https://nathanielaidoo.me),
+[LinkedIn](https://www.linkedin.com/in/nathaniel-ankomah-aidoo))
 
-## Demo
+> **PRELIMINARY RESULTS.** LLM triage has been run **once** (run 1 of 3). The final
+> three-run mean ± spread is pending (see [PROGRESS.md](PROGRESS.md)); cells marked
+> `TBD` below are placeholders. Differences of a few points between B and C may be noise.
 
-Scan pasted Java, JavaScript or Python (or click an example) and see OWASP Top 10 2025
-findings with optional LLM triage. Code is only read, never run.
+<!-- TODO: add demo GIF here (docs/demo.gif) once recorded -->
+*Demo GIF: placeholder.*
 
-```powershell
-docker build --target demo -t sentinel-demo .
-docker run --rm -p 7860:7860 sentinel-demo   # http://localhost:7860
+## What it does
+
+Scan Java, JavaScript or Python code with Opengrep and open rules, map each finding to
+an OWASP Top 10 2025 category, let an LLM label each as true or false positive, and
+(optionally) generate a fix that is only accepted if a re-scan confirms it. Scanners
+only read code; nothing scanned is ever executed.
+
+## Architecture
+
+```mermaid
+flowchart LR
+  SRC[Code<br/>repo / paste] --> SCAN[Opengrep + Bandit<br/>sast-rules + custom rules]
+  SCAN --> NORM[Normaliser<br/>SARIF to Finding]
+  NORM --> MAP[OWASP 2025 mapper<br/>CWE to A01..A10]
+  MAP --> TRI[LLM triage<br/>verdict + why]
+  TRI --> FIX[Fix generator]
+  FIX --> VER[Verifier<br/>re-scan patched file]
+  TRI --> CACHE[(LLM cache)]
+  GT[OWASP Benchmark<br/>expected results] --> BENCH[Benchmark runner]
+  TRI --> BENCH
+  BENCH --> RES[results/ + demo pages]
 ```
 
-**Live static demo (preliminary results, no live scanning):**
-<https://ankomahaidoo-owasp-sentinel.static.hf.space/>. Hugging Face's free tier no
-longer hosts Docker Spaces, so the live scanner runs locally with the two commands
-above. See [DEPLOY.md](DEPLOY.md).
+## Results (OWASP Benchmark for Java, 450-case stratified sample)
+
+*Precision: how many flagged issues are real. Recall: how many real issues are found.
+False-positive rate (FPR): how many safe samples are wrongly flagged.*
+
+| Configuration | Precision | Recall | FPR |
+|---|--:|--:|--:|
+| A. Opengrep + GitLab sast-rules | 0.675 | 0.600 | 0.289 |
+| B. A + custom Java rules | 0.676 | 0.889 | 0.427 |
+| C. B + LLM triage, **preliminary (1 run)** | 0.712 | 0.889 | 0.360 |
+| C. B + LLM triage, **final (3 runs, mean ± sd)** | TBD | TBD | TBD |
+
+Triage model: `gemini-3.1-flash-lite`, temperature 0.3, 388 findings triaged per run.
+Full-Benchmark baselines, per-category tables and the OWASP 2025 coverage matrix
+(unmeasured categories are "Not covered") are in `results/` and on the
+[benchmark page](https://ankomahaidoo-owasp-sentinel.static.hf.space/benchmark.html).
+
+## How to run
+
+See Quickstart and Running scans below. In short:
+
+```powershell
+pip install -e ".[dev]"; pytest
+docker build --target demo -t sentinel-demo .
+docker run --rm -p 7860:7860 sentinel-demo   # live scanner at http://localhost:7860
+```
+
+## Limitations
+
+- Triage numbers are one run until runs 2 and 3 finish; no variance is known yet.
+- One benchmark, one language (Java) is scored. Juice Shop (JavaScript) is not scored in
+  the headline table; Python has fixtures only, no benchmark claims.
+- The custom rules are broad: recall rises 0.600 to 0.889 but FPR rises 0.289 to 0.427.
+- The LLM may have seen the public Benchmark in training, which could flatter C.
+- The public demo is static; hosted live scanning needs a Docker host (not free on
+  Hugging Face).
+- Only 5 of the 10 OWASP 2025 categories have any ground truth; see the coverage matrix.
+
+## Future work
+
+Tune the custom rules to lower FPR; finish three triage runs and add charts; compare an
+open-weights model against the hosted one; score Juice Shop with a small hand-labelled
+set; test on contamination-free (newly written) vulnerable code.
 
 ## Quickstart (Windows, PowerShell)
 
