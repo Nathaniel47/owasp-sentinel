@@ -252,3 +252,13 @@ docker build --target demo -t sentinel-demo .
 docker run --rm -p 7860:7860 sentinel-demo   # open http://localhost:7860
 pytest tests/test_demo.py
 ```
+
+### Step 7 update: what actually got deployed
+
+Hugging Face refused to create a free Docker Space (HTTP 402, PRO needed), so the public
+demo is a **static Space**: two HTML pages rendered from `results/*.json` by
+`scripts/build_static.py`. This is the safest possible deployment (no server, no code
+execution, no key) at the cost of no live scanning, which stays available locally via
+Docker. Free-tier terms change, so check them before planning a deployment. The static
+page reads the same data as the app, so the PRELIMINARY banner disappears when the
+final three-run numbers are rendered and re-uploaded.

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}OWASP Sentinel{% endblock %}
+{% block body %}
+<h1>OWASP Sentinel</h1>
+<p>A hybrid scanner for the OWASP Top 10 (2025): static analysis (Opengrep with open
+rules) finds candidate vulnerabilities, and an LLM gives a second opinion on each to
+cut false positives. It is benchmarked on the OWASP Benchmark (Java) with known
+answers.</p>
+<div class="banner" role="note"><strong>PRELIMINARY results.</strong>
+The LLM triage numbers below come from {{ t.runs_completed }} of 3 planned runs, so
+there is no run-to-run spread yet. Differences of a few points may be noise.</div>
+<div class="card"><strong>This page is a static, read-only demo.</strong> The live
+scanner (paste code, get findings) is not hosted here. It runs locally with Docker:
+see the <a href="{{ readme_url }}">README</a> for the two commands.</div>
+
+<h2>Headline numbers (450-case Benchmark sample, Java)</h2>
+<div class="scroll"><table><tr><th class="l">Configuration</th><th>Precision</th><th>Recall</th><th>False-positive rate</th></tr>
+{% for n in t.names %}<tr><td class="l">{{ n }}</td>
+{% for m in ['precision','recall','fpr'] %}<td>{{ '%.3f' % t.configs[n].overall[m].mean }}</td>{% endfor %}</tr>{% endfor %}</table></div>
+<ul>
+<li>Custom rules (B) raise recall but also the false-positive rate; they are broad and untuned.</li>
+<li>LLM triage (C) removed 19 of 388 findings in the single run, lowering the false-positive rate without losing recall.</li>
+<li>The model may have seen the public Benchmark in training, which could flatter C.</li>
+</ul>
+<p><a class="btn" href="{{ bench_url }}">Full benchmark results and OWASP 2025 coverage</a></p>
+<p class="mute">Only categories with ground truth get metrics; the others are listed as
+"Not covered". Model: <code>{{ t.model }}</code>.</p>
+{% endblock %}
